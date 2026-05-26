@@ -37,7 +37,10 @@ export default async function ArticlesPage({ searchParams }) {
           <h1 className="mb-4 text-5xl font-bold">Articles</h1>
 
           <p className="max-w-2xl text-muted-foreground">
-            Explore published research articles and academic works.
+            Ini adalah halaman untuk melihat semua artikel yang telah
+            dipublikasikan. Kamu bisa mencari artikel berdasarkan judul atau
+            kutipan singkatnya. Klik pada judul artikel untuk membaca
+            selengkapnya.
           </p>
         </div>
 
