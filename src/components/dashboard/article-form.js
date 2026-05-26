@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { uploadPDF } from "@/lib/supabase/storage";
 
 export default function ArticleForm() {
   const [loading, setLoading] = useState(false);
@@ -12,6 +13,14 @@ export default function ArticleForm() {
 
     const formData = new FormData(e.target);
 
+    const pdfFile = formData.get("pdf");
+
+    let attachment = null;
+
+    if (pdfFile && pdfFile.size > 0) {
+      attachment = await uploadPDF(pdfFile);
+    }
+
     const response = await fetch("/api/articles", {
       method: "POST",
       body: JSON.stringify({
@@ -19,6 +28,7 @@ export default function ArticleForm() {
         slug: formData.get("slug"),
         excerpt: formData.get("excerpt"),
         content: formData.get("content"),
+        attachment,
       }),
     });
 
@@ -62,6 +72,22 @@ export default function ArticleForm() {
           className="w-full rounded-lg border p-3"
           rows={10}
           required
+        />
+      </div>
+
+      <div>
+        <label className="mb-2 block font-medium">PDF File</label>
+
+        <input
+          type="file"
+          name="pdf"
+          accept=".pdf"
+          className="
+        w-full
+        rounded-lg
+        border
+        p-3
+      "
         />
       </div>
 

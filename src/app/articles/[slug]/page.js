@@ -8,6 +8,10 @@ export default async function ArticleDetailPage({ params }) {
     where: {
       slug,
     },
+
+    include: {
+      attachment: true,
+    },
   });
 
   if (!article) {
@@ -24,6 +28,25 @@ export default async function ArticleDetailPage({ params }) {
 
       <article className="prose prose-neutral max-w-none">
         <p>{article.content}</p>
+        {article.attachment && (
+          <div className="mt-10">
+            <a
+              href={article.attachment.fileUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="
+          inline-flex
+          rounded-lg
+          bg-black
+          px-6
+          py-3
+          text-white
+        "
+            >
+              Download PDF
+            </a>
+          </div>
+        )}
       </article>
     </main>
   );

@@ -11,13 +11,18 @@ export async function POST(req) {
         slug: body.slug,
         excerpt: body.excerpt,
         content: body.content,
-        published: true,
 
-        author: {
-          connect: {
-            email: "admin@example.com",
-          },
-        },
+        authorId: "cmpm51qiw0000hqpk5l2a60wz", // hardcoded untuk sementara
+
+        attachment: body.attachment
+          ? {
+              create: {
+                fileName: body.attachment.fileName,
+
+                fileUrl: body.attachment.fileUrl,
+              },
+            }
+          : undefined,
       },
     });
 

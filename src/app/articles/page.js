@@ -7,8 +7,8 @@ export default async function ArticlesPage({ searchParams }) {
   const search = searchParams.search || "";
 
   const articles = await prisma.article.findMany({
-    where: {
-      published: true,
+    orderBy: {
+      createdAt: "desc",
       OR: [
         {
           title: {
