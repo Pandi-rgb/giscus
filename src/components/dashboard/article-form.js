@@ -22,7 +22,7 @@ export default function ArticleForm({categories}) {
     let attachment = null;
 
 
-// bagian uploa d file PDF dan cover image ke Supabase Storage, lalu dapatkan URL-nya untuk disimpan di database
+// bagian upload file PDF dan cover image ke Supabase Storage, lalu dapatkan URL-nya untuk disimpan di database
     let coverImage = null;
 
     if (coverFile && coverFile.size > 0) {

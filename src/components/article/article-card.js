@@ -32,6 +32,7 @@ export default function ArticleCard({ article }) {
           className="
             mb-4
             flex
+            flex-wrap
             items-center
             gap-2
             text-sm
@@ -39,6 +40,11 @@ export default function ArticleCard({ article }) {
           "
         >
           <span>{new Date(article.createdAt).toLocaleDateString()}</span>
+          {article.category?.name && (
+            <span className="rounded-full bg-muted px-2 py-1 text-xs">
+              {article.category.name}
+            </span>
+          )}
         </div>
 
         <h2

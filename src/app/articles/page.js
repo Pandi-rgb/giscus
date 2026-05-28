@@ -4,13 +4,26 @@ import ArticleCard from "@/components/article/article-card";
 import ArticleSearch from "@/components/article/article-search";
 
 export default async function ArticlesPage({ searchParams }) {
-  const resolvedSearchParams = await searchParams; // untuk memastikan searchParams sudah ter-resolve sebelum digunakan
-  const search = resolvedSearchParams.q || ""; // gunakan resolvedSearchParams untuk mendapatkan nilai search
+  const resolvedSearchParams = await searchParams;
+  const search = resolvedSearchParams.q || "";
+  const categorySlug = resolvedSearchParams.category || "";
+
+  const categories = await prisma.category.findMany({
+    orderBy: {
+      name: "asc",
+    },
+  });
 
   const articles = await prisma.article.findMany({
     where: {
       published: true,
-
+      ...(categorySlug
+        ? {
+            category: {
+              slug: categorySlug,
+            },
+          }
+        : {}),
       OR: [
         {
           title: {
@@ -34,7 +47,9 @@ export default async function ArticlesPage({ searchParams }) {
         },
       ],
     },
-
+    include: {
+      category: true,
+    },
     orderBy: {
       createdAt: "desc",
     },
@@ -82,7 +97,7 @@ export default async function ArticlesPage({ searchParams }) {
           </p>
         </div>
 
-        <ArticleSearch />
+        <ArticleSearch categories={categories} />
       </div>
 
       {articles.length === 0 ? (
