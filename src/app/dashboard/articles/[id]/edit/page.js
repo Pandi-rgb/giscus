@@ -10,11 +10,21 @@ export default async function EditArticlePage({ params }) {
     where: {
       id,
     },
+    include: {
+      attachment: true,
+      tags: true,
+    },
   });
 
   if (!article) {
     notFound();
   }
+
+  const categories = await prisma.category.findMany({
+    orderBy: {
+      name: "asc",
+    },
+  });
 
   return (
     <main className="container mx-auto max-w-3xl px-4 py-20">
@@ -26,7 +36,7 @@ export default async function EditArticlePage({ params }) {
         </p>
       </div>
 
-      <EditArticleForm article={article} />
+      <EditArticleForm article={article} categories={categories} />
     </main>
   );
 }

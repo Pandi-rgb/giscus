@@ -5,7 +5,7 @@ import { uploadPDF } from "@/lib/supabase/storage";
 import { uploadCover } from "@/lib/supabase/upload-cover";
 import RichTextEditor from "./rich-text-editor"; // 🆕 Import Tiptap Editor baru
 
-export default function ArticleForm({ categories }) {
+export default function ArticleForm({ categories, tags = [] }) {
   const [loading, setLoading] = useState(false);
   const [content, setContent] = useState(""); // 🆕 State khusus untuk menampung HTML Tiptap
 
@@ -39,6 +39,11 @@ export default function ArticleForm({ categories }) {
           excerpt: formData.get("excerpt"),
           content: content, // 🆕 Kirim nilai dari state Tiptap, bukan dari formData
           categoryId: formData.get("categoryId"),
+          tagNames: formData
+            .get("tags")
+            .split(",")
+            .map((tag) => tag.trim())
+            .filter(Boolean),
           attachment,
           coverImage,
         }),
@@ -105,6 +110,21 @@ export default function ArticleForm({ categories }) {
               </option>
             ))}
           </select>
+        </div>
+
+        <div>
+          <label className="mb-2 block font-medium">Tags</label>
+          <input
+            name="tags"
+            list="available-tags"
+            placeholder="research, publication, data"
+            className="w-full rounded-lg border p-3 bg-white"
+          />
+          <datalist id="available-tags">
+            {tags.map((tag) => (
+              <option key={tag.id} value={tag.name} />
+            ))}
+          </datalist>
         </div>
 
         <div>

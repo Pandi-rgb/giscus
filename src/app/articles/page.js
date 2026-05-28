@@ -2,58 +2,215 @@ import { prisma } from "@/lib/prisma";
 
 import ArticleCard from "@/components/article/article-card";
 import ArticleSearch from "@/components/article/article-search";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+
+const ARTICLES_PER_PAGE = 6;
+
+function getParamValue(value, fallback = "") {
+  if (Array.isArray(value)) {
+    return value[0] || fallback;
+  }
+
+  return value || fallback;
+}
+
+function getArticleOrderBy(sort) {
+  if (sort === "oldest") {
+    return { createdAt: "asc" };
+  }
+
+  if (sort === "title") {
+    return { title: "asc" };
+  }
+
+  return { createdAt: "desc" };
+}
+
+function createPageHref(searchParams, page) {
+  const params = new URLSearchParams();
+
+  for (const [key, value] of Object.entries(searchParams)) {
+    const paramValue = getParamValue(value);
+
+    if (paramValue && key !== "page") {
+      params.set(key, paramValue);
+    }
+  }
+
+  if (page > 1) {
+    params.set("page", String(page));
+  }
+
+  const queryString = params.toString();
+
+  return queryString ? `/articles?${queryString}` : "/articles";
+}
+
+function Pagination({ currentPage, totalPages, searchParams }) {
+  if (totalPages <= 1) {
+    return null;
+  }
+
+  const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
+
+  return (
+    <nav
+      aria-label="Articles pagination"
+      className="mt-10 flex flex-wrap items-center justify-center gap-2"
+    >
+      <Button variant="outline" asChild>
+        <Link
+          aria-disabled={currentPage === 1}
+          className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+          href={createPageHref(searchParams, Math.max(currentPage - 1, 1))}
+          tabIndex={currentPage === 1 ? -1 : undefined}
+        >
+          Previous
+        </Link>
+      </Button>
+
+      {pages.map((page) => (
+        <Button
+          key={page}
+          variant={page === currentPage ? "default" : "outline"}
+          asChild
+        >
+          <Link
+            aria-current={page === currentPage ? "page" : undefined}
+            href={createPageHref(searchParams, page)}
+          >
+            {page}
+          </Link>
+        </Button>
+      ))}
+
+      <Button variant="outline" asChild>
+        <Link
+          aria-disabled={currentPage === totalPages}
+          className={
+            currentPage === totalPages ? "pointer-events-none opacity-50" : ""
+          }
+          href={createPageHref(
+            searchParams,
+            Math.min(currentPage + 1, totalPages),
+          )}
+          tabIndex={currentPage === totalPages ? -1 : undefined}
+        >
+          Next
+        </Link>
+      </Button>
+    </nav>
+  );
+}
 
 export default async function ArticlesPage({ searchParams }) {
   const resolvedSearchParams = await searchParams;
-  const search = resolvedSearchParams.q || "";
-  const categorySlug = resolvedSearchParams.category || "";
+  const search = getParamValue(resolvedSearchParams.q);
+  const categorySlug = getParamValue(resolvedSearchParams.category);
+  const tagSlug = getParamValue(resolvedSearchParams.tag);
+  const sort = getParamValue(resolvedSearchParams.sort, "newest");
+  const requestedPage = Number(getParamValue(resolvedSearchParams.page, "1"));
+  const currentPage =
+    Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1;
 
-  const categories = await prisma.category.findMany({
-    orderBy: {
-      name: "asc",
-    },
-  });
-
-  const articles = await prisma.article.findMany({
-    where: {
-      published: true,
-      ...(categorySlug
-        ? {
-            category: {
-              slug: categorySlug,
+  const where = {
+    published: true,
+    ...(categorySlug
+      ? {
+          category: {
+            slug: categorySlug,
+          },
+        }
+      : {}),
+    ...(tagSlug
+      ? {
+          tags: {
+            some: {
+              slug: tagSlug,
             },
-          }
-        : {}),
-      OR: [
-        {
-          title: {
-            contains: search,
-            mode: "insensitive",
           },
-        },
+        }
+      : {}),
+    ...(search
+      ? {
+          OR: [
+            {
+              title: {
+                contains: search,
+                mode: "insensitive",
+              },
+            },
 
-        {
-          excerpt: {
-            contains: search,
-            mode: "insensitive",
-          },
-        },
+            {
+              excerpt: {
+                contains: search,
+                mode: "insensitive",
+              },
+            },
 
-        {
-          content: {
-            contains: search,
-            mode: "insensitive",
-          },
-        },
-      ],
-    },
-    include: {
-      category: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+            {
+              content: {
+                contains: search,
+                mode: "insensitive",
+              },
+            },
+          ],
+        }
+      : {}),
+  };
+
+  const [categories, tags, totalArticles, articles] = await prisma.$transaction([
+    prisma.category.findMany({
+      orderBy: {
+        name: "asc",
+      },
+    }),
+    prisma.tag.findMany({
+      orderBy: {
+        name: "asc",
+      },
+    }),
+    prisma.article.count({
+      where,
+    }),
+    prisma.article.findMany({
+      where,
+      include: {
+        category: true,
+        tags: true,
+      },
+      orderBy: getArticleOrderBy(sort),
+      skip: (currentPage - 1) * ARTICLES_PER_PAGE,
+      take: ARTICLES_PER_PAGE,
+    }),
+  ]);
+
+  const totalPages = Math.max(1, Math.ceil(totalArticles / ARTICLES_PER_PAGE));
+  const firstArticleNumber =
+    totalArticles === 0 ? 0 : (currentPage - 1) * ARTICLES_PER_PAGE + 1;
+  const lastArticleNumber = Math.min(
+    currentPage * ARTICLES_PER_PAGE,
+    totalArticles,
+  );
+
+  if (currentPage > totalPages && totalArticles > 0) {
+    return (
+      <main className="container mx-auto px-4 py-20">
+        <div className="rounded-2xl border p-10 text-center">
+          <h1 className="mb-2 text-2xl font-semibold">Page not found</h1>
+          <p className="mb-6 text-muted-foreground">
+            The page number is outside the available articles.
+          </p>
+          <Button asChild>
+            <Link href={createPageHref(resolvedSearchParams, totalPages)}>
+              Go to last page
+            </Link>
+          </Button>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main
@@ -70,9 +227,9 @@ export default async function ArticlesPage({ searchParams }) {
           flex
           flex-col
           gap-6
-          md:flex-row
-          md:items-center
-          md:justify-between
+          xl:flex-row
+          xl:items-center
+          xl:justify-between
         "
       >
         <div>
@@ -97,7 +254,7 @@ export default async function ArticlesPage({ searchParams }) {
           </p>
         </div>
 
-        <ArticleSearch categories={categories} />
+        <ArticleSearch categories={categories} tags={tags} />
       </div>
 
       {articles.length === 0 ? (
@@ -128,19 +285,32 @@ export default async function ArticlesPage({ searchParams }) {
           </p>
         </div>
       ) : (
-        <div
-          className="
-            grid
-            grid-cols-1
-            gap-6
-            md:grid-cols-2
-            lg:grid-cols-3
-          "
-        >
-          {articles.map((article) => (
-            <ArticleCard key={article.id} article={article} />
-          ))}
-        </div>
+        <>
+          <div className="mb-6 text-sm text-muted-foreground">
+            Showing {firstArticleNumber}-{lastArticleNumber} of {totalArticles}{" "}
+            articles
+          </div>
+
+          <div
+            className="
+              grid
+              grid-cols-1
+              gap-6
+              md:grid-cols-2
+              lg:grid-cols-3
+            "
+          >
+            {articles.map((article) => (
+              <ArticleCard key={article.id} article={article} />
+            ))}
+          </div>
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            searchParams={resolvedSearchParams}
+          />
+        </>
       )}
     </main>
   );

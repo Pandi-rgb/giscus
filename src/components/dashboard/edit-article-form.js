@@ -44,6 +44,11 @@ export default function EditArticleForm({ article, categories = [] }) {
           excerpt: formData.get("excerpt"),
           content: content, // Teks yang sudah diedit di Tiptap
           categoryId: formData.get("categoryId"),
+          tagNames: formData
+            .get("tags")
+            .split(",")
+            .map((tag) => tag.trim())
+            .filter(Boolean),
           attachment,
           coverImage,
         }),
@@ -114,6 +119,16 @@ export default function EditArticleForm({ article, categories = [] }) {
               </option>
             ))}
           </select>
+        </div>
+
+        <div>
+          <label className="mb-2 block font-medium">Tags</label>
+          <input
+            name="tags"
+            defaultValue={article?.tags?.map((tag) => tag.name).join(", ")}
+            placeholder="research, publication, data"
+            className="w-full rounded-lg border p-3 bg-white"
+          />
         </div>
 
         <div>

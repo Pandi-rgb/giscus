@@ -65,8 +65,8 @@
 ## Landing Page
 
 - [x] Hero section
-- [ ] Profile summary
-- [ ] Featured research/articles
+- [x] Profile summary
+- [x] Featured research/articles
 - [x] Navigation menu
 - [x] CTA buttons
 
@@ -82,7 +82,7 @@
 
 - [x] Article listing
 - [x] Search feature
-- [ ] Pagination
+- [x] Pagination
 - [x] Filter by category/tag
 - [x] Sort articles
 
@@ -90,10 +90,10 @@
 
 - [x] Dynamic routing
 - [x] Article content rendering
-- [ ] Metadata & SEO
+- [x] Metadata & SEO
 - [x] PDF download button
-- [ ] Related articles
-- [ ] Reading time estimation
+- [x] Related articles
+- [x] Reading time estimation
 
 ## Contact Page
 
@@ -107,14 +107,14 @@
 # 6. Admin Dashboard
 
 - [x] Dashboard layout
-- [ ] Sidebar navigation
+- [x] Sidebar navigation
 - [x] CRUD article management
-- [ ] Rich text editor integration
+- [x] Rich text editor integration
 - [x] Upload featured image
 - [x] Upload PDF file
 - [x] Draft & publish system
 - [x] Category management (basic integration)
-- [ ] Tag management
+- [x] Tag management
 
 ---
 
