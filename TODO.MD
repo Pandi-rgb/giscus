@@ -19,7 +19,7 @@
 - [x] Install lucide-react icons
 - [x] Create reusable UI components
   - [x] Navbar
-  - [ ] Footer
+  - [x] Footer
   - [x] Hero Section
   - [x] Article Card
   - [x] Search Input

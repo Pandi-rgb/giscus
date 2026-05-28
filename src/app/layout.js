@@ -1,6 +1,7 @@
 import "./globals.css";
 
 import Navbar from "@/components/layout/navbar";
+import Footer from "@/components/layout/footer";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata = {
@@ -26,6 +27,7 @@ export default function RootLayout({ children }) {
           {children}
         </main>
 
+        <Footer />
         <Toaster />
       </body>
     </html>

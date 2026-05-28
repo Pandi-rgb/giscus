@@ -57,7 +57,7 @@ export default function ArticleForm({ categories }) {
   }
 
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-3xl mb-8">
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label className="mb-2 block font-medium">Title</label>
