@@ -1,20 +1,95 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
 
 export default function Navbar() {
+  const [open, setOpen] = useState(false);
+
   return (
-    <header className="border-b bg-white">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <Link href="/" className="text-xl font-bold">
+    <header className="border-b">
+      <div
+        className="
+          mx-auto
+          flex
+          max-w-7xl
+          items-center
+          justify-between
+          px-4
+          py-4
+        "
+      >
+        {/* Logo */}
+        <Link
+          href="/"
+          className="
+            text-xl
+            font-bold
+          "
+        >
           Research Repository
         </Link>
 
-        <nav className="flex items-center gap-6 text-sm font-medium">
+        {/* Desktop Menu */}
+        <nav
+          className="
+            hidden
+            items-center
+            gap-6
+            md:flex
+          "
+        >
           <Link href="/">Home</Link>
-          <Link href="/about">About</Link>
+
           <Link href="/articles">Articles</Link>
+
+          <Link href="/about">About</Link>
+
           <Link href="/contact">Contact</Link>
         </nav>
+
+        {/* Mobile Button */}
+        <button onClick={() => setOpen(!open)} className="md:hidden">
+          {open ? <X size={28} /> : <Menu size={28} />}
+        </button>
       </div>
+
+      {/* Mobile Menu */}
+      {open && (
+        <div
+          className="
+            border-t
+            px-4
+            py-4
+            md:hidden
+          "
+        >
+          <nav
+            className="
+              flex
+              flex-col
+              gap-4
+            "
+          >
+            <Link href="/" onClick={() => setOpen(false)}>
+              Home
+            </Link>
+
+            <Link href="/articles" onClick={() => setOpen(false)}>
+              Articles
+            </Link>
+
+            <Link href="/about" onClick={() => setOpen(false)}>
+              About
+            </Link>
+
+            <Link href="/contact" onClick={() => setOpen(false)}>
+              Contact
+            </Link>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }

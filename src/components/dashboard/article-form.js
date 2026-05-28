@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { uploadPDF } from "@/lib/supabase/storage";
+import { XLineTop } from "lucide-react";
+import { uploadCover } from "@/lib/supabase/upload-cover";
 
 export default function ArticleForm() {
   const [loading, setLoading] = useState(false);
@@ -15,12 +17,22 @@ export default function ArticleForm() {
 
     const pdfFile = formData.get("pdf");
 
+    const coverFile = formData.get("cover");
+
     let attachment = null;
+
+
+// bagian uploa d file PDF dan cover image ke Supabase Storage, lalu dapatkan URL-nya untuk disimpan di database
+    let coverImage = null;
+
+    if (coverFile && coverFile.size > 0) {
+      coverImage = await uploadCover(coverFile);
+    }
 
     if (pdfFile && pdfFile.size > 0) {
       attachment = await uploadPDF(pdfFile);
     }
-
+    // kirim data ke API route untuk disimpan di database
     const response = await fetch("/api/articles", {
       method: "POST",
       body: JSON.stringify({
@@ -29,6 +41,7 @@ export default function ArticleForm() {
         excerpt: formData.get("excerpt"),
         content: formData.get("content"),
         attachment,
+        coverImage,
       }),
     });
 
@@ -41,62 +54,102 @@ export default function ArticleForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <label className="mb-2 block font-medium">Title</label>
+    <div className="max-w-3xl">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          <label className="mb-2 block font-medium">Title</label>
 
-        <input name="title" className="w-full rounded-lg border p-3" required />
-      </div>
+          <input
+            name="title"
+            className="w-full rounded-lg border p-3"
+            required
+          />
+        </div>
 
-      <div>
-        <label className="mb-2 block font-medium">Slug</label>
+        <div>
+          <label className="mb-2 block font-medium">Slug</label>
 
-        <input name="slug" className="w-full rounded-lg border p-3" required />
-      </div>
+          <input
+            name="slug"
+            className="w-full rounded-lg border p-3"
+            required
+          />
+        </div>
 
-      <div>
-        <label className="mb-2 block font-medium">Excerpt</label>
+        <div>
+          <label className="mb-2 block font-medium">Excerpt</label>
 
-        <textarea
-          name="excerpt"
-          className="w-full rounded-lg border p-3"
-          rows={3}
-        />
-      </div>
+          <textarea
+            name="excerpt"
+            className="w-full rounded-lg border p-3"
+            rows={3}
+          />
+        </div>
 
-      <div>
-        <label className="mb-2 block font-medium">Content</label>
+        <div>
+          <label className="mb-2 block font-medium">Content</label>
 
-        <textarea
-          name="content"
-          className="w-full rounded-lg border p-3"
-          rows={10}
-          required
-        />
-      </div>
+          <textarea
+            name="content"
+            className="w-full rounded-lg border p-3"
+            rows={10}
+            required
+          />
+        </div>
 
-      <div>
-        <label className="mb-2 block font-medium">PDF File</label>
+        <div>
+          <label
+            className="
+      mb-2
+      block
+      font-medium
+    "
+          >
+            Cover Image
+          </label>
 
-        <input
-          type="file"
-          name="pdf"
-          accept=".pdf"
-          className="
+          <input
+            type="file"
+            name="cover"
+            accept="image/*"
+            className="
+      w-full
+      rounded-lg
+      border
+      p-3
+      bg-yellow-500
+      hover:bg-yellow-600
+      cursor-pointer
+    "
+          />
+        </div>
+
+        <div>
+          <label className="mb-2 block font-medium">PDF File</label>
+
+          <input
+            type="file"
+            name="pdf"
+            accept=".pdf"
+            className="
         w-full
         rounded-lg
         border
         p-3
+        bg-yellow-500
+        hover:bg-yellow-600
+        cursor-pointer
       "
-        />
-      </div>
+          />
+        </div>
 
-      <button
-        disabled={loading}
-        className="rounded-lg bg-black px-6 py-3 text-white"
-      >
-        {loading ? "Creating..." : "Create Article"}
-      </button>
-    </form>
+        <button
+          disabled={loading}
+          className="rounded-lg bg-black px-6 py-3 text-white"
+        >
+          {loading ? "Creating..." : "Create Article"}
+        </button>
+      </form>
+    </div>
   );
 }

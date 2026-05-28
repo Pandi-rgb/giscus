@@ -2,12 +2,10 @@
 
 import { useRouter } from "next/navigation";
 
-import { createClient } from "@/lib/supabase/client";
+import { supabase } from "@/lib/supabase/client";
 
 export default function LogoutButton() {
   const router = useRouter();
-
-  const supabase = createClient();
 
   async function handleLogout() {
     await supabase.auth.signOut();
@@ -25,6 +23,8 @@ export default function LogoutButton() {
         px-4
         py-2
         text-sm
+        hover:bg-gray-100
+        cursor-pointer
       "
     >
       Logout

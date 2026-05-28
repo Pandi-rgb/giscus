@@ -1,8 +1,6 @@
-import { createClient } from "@/lib/supabase/client";
+import { supabase } from "./client";
 
 export async function uploadPDF(file) {
-  const supabase = createClient();
-
   const fileName = `${Date.now()}-${file.name}`;
 
   const { error } = await supabase.storage
@@ -13,12 +11,11 @@ export async function uploadPDF(file) {
     throw error;
   }
 
-  const {
-    data: { publicUrl },
-  } = supabase.storage.from("research-pdfs").getPublicUrl(fileName);
+  const { data } = supabase.storage.from("research-pdfs").getPublicUrl(fileName);
 
   return {
-    fileName,
-    fileUrl: publicUrl,
+    fileName: file.name,
+
+    fileUrl: data.publicUrl,
   };
 }

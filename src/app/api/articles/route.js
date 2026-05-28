@@ -11,6 +11,8 @@ export async function POST(req) {
         slug: body.slug,
         excerpt: body.excerpt,
         content: body.content,
+        coverImage: body.coverImage,
+        published: true,
 
         authorId: "cmpm51qiw0000hqpk5l2a60wz", // hardcoded untuk sementara
 

@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 
 export default async function ArticleDetailPage({ params }) {
   const { slug } = await params;
@@ -20,13 +21,28 @@ export default async function ArticleDetailPage({ params }) {
 
   return (
     <main className="container mx-auto max-w-4xl px-4 py-20">
-      <h1 className="mb-6 text-5xl font-bold">{article.title}</h1>
+      <h1 className="mb-6 text-3xl md:text-5xl font-bold">{article.title}</h1>
+      {article.coverImage && (
+        <Image
+          src={article.coverImage}
+          alt={article.title}
+          width={1200}
+          height={600}
+          className="
+      mb-8
+      h-96
+      w-full
+      rounded-2xl
+      object-cover
+    "
+        />
+      )}
 
       <p className="mb-8 text-muted-foreground">
         {new Date(article.createdAt).toLocaleDateString()}
       </p>
 
-      <article className="prose prose-neutral max-w-none">
+      <article className="prose prose-neutral max-w-none wrap-break-words">
         <p>{article.content}</p>
         {article.attachment && (
           <div className="mt-10">

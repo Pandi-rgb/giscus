@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button";
 export default function HomePage() {
   return (
     <main>
-      <section className="container mx-auto flex min-h-[80vh] flex-col items-center justify-center px-4 text-center">
+      <section className="container mx-auto flex min-h-[80vh] flex-col md:flex-row items-center justify-center px-4 text-center">
         <span className="mb-4 rounded-full border px-4 py-1 text-sm">
           Digital Research Archive
         </span>
 
-        <h1 className="mb-6 max-w-4xl text-5xl font-bold leading-tight md:text-7xl">
+        <h1 className="mb-6 max-w-4xl text-4xl font-bold leading-tight md:text-6xl lg:text-7xl">
           Research Repository
         </h1>
 
