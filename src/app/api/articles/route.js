@@ -13,6 +13,7 @@ export async function POST(req) {
         content: body.content,
         coverImage: body.coverImage,
         published: true,
+        categoryId: body.categoryId || null,
 
         authorId: "cmpm51qiw0000hqpk5l2a60wz", // hardcoded untuk sementara
 

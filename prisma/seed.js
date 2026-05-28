@@ -3,43 +3,46 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 async function main() {
-  const user = await prisma.user.create({
-    data: {
-      email: "admin@example.com",
-      name: "Admin",
-    },
-  });
-
-  await prisma.article.createMany({
+  await prisma.category.createMany({
     data: [
       {
-        title: "Artificial Intelligence in Education",
-        slug: "artificial-intelligence-in-education",
-        excerpt: "Exploring AI implementation in modern education.",
-        content:
-          "This research discusses the impact of AI in educational environments.",
-        published: true,
-        authorId: user.id,
+        name: "AI",
+        slug: "ai",
       },
+
       {
-        title: "Cloud Computing Architecture",
-        slug: "cloud-computing-architecture",
-        excerpt: "Research about scalable cloud systems.",
-        content:
-          "This article explains cloud-native infrastructure and scalability.",
-        published: true,
-        authorId: user.id,
+        name: "Web Development",
+
+        slug: "web-development",
+      },
+
+      {
+        name: "Research",
+
+        slug: "research",
+      },
+
+      {
+        name: "Machine Learning",
+
+        slug: "machine-learning",
+      },
+
+      {
+        name: "UI/UX",
+
+        slug: "ui-ux",
       },
     ],
+
+    skipDuplicates: true,
   });
+
+  console.log("Categories seeded!");
 }
 
 main()
-  .then(async () => {
+  .catch(console.error)
+  .finally(async () => {
     await prisma.$disconnect();
-  })
-  .catch(async (e) => {
-    console.error(e);
-    await prisma.$disconnect();
-    process.exit(1);
   });

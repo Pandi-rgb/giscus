@@ -5,7 +5,7 @@ import { uploadPDF } from "@/lib/supabase/storage";
 import { XLineTop } from "lucide-react";
 import { uploadCover } from "@/lib/supabase/upload-cover";
 
-export default function ArticleForm() {
+export default function ArticleForm({categories}) {
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e) {
@@ -40,6 +40,7 @@ export default function ArticleForm() {
         slug: formData.get("slug"),
         excerpt: formData.get("excerpt"),
         content: formData.get("content"),
+        categoryId: formData.get("categoryId"),
         attachment,
         coverImage,
       }),
@@ -97,6 +98,36 @@ export default function ArticleForm() {
           />
         </div>
 
+        <div>
+          <label
+            className="
+      mb-2
+      block
+      font-medium
+    "
+          >
+            Category
+          </label>
+
+          <select
+            name="categoryId"
+            className="
+      w-full
+      rounded-lg
+      border
+      p-3
+    "
+          >
+            <option value="">Select category</option>
+
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        
         <div>
           <label
             className="

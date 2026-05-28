@@ -6,6 +6,22 @@ export async function DELETE(req, { params }) {
   try {
     const { id } = await params;
 
+    const article = await prisma.article.findUnique({
+      where: { id },
+
+      include: {
+        attachment: true,
+      },
+    });
+
+    if (article?.attachment) {
+      await prisma.attachment.delete({
+        where: {
+          articleId: id,
+        },
+      });
+    }
+
     await prisma.article.delete({
       where: {
         id,

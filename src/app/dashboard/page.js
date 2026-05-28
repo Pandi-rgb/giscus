@@ -9,6 +9,11 @@ export default async function DashboardPage() {
       createdAt: "desc",
     },
   });
+  const categories = await prisma.category.findMany({
+    orderBy: {
+      name: "asc",
+    },
+  });
 
   return (
     <main className="container mx-auto px-4 py-20">

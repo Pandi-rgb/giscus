@@ -1,30 +1,45 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+
+import { useEffect, useState } from "react";
+
 import { Input } from "@/components/ui/input";
 
 export default function ArticleSearch() {
   const router = useRouter();
+
   const searchParams = useSearchParams();
 
-  function handleSearch(value) {
-    const params = new URLSearchParams(searchParams);
+  const initialQuery = searchParams.get("q") || "";
 
-    if (value) {
-      params.set("search", value);
-    } else {
-      params.delete("search");
-    }
+  const [query, setQuery] = useState(initialQuery);
 
-    router.push(`/articles?${params.toString()}`);
-  }
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const params = new URLSearchParams(searchParams);
+
+      if (query) {
+        params.set("q", query);
+      } else {
+        params.delete("q");
+      }
+
+      router.replace(`/articles?${params.toString()}`);
+    }, 400);
+
+    return () => clearTimeout(timeout);
+  }, [query, router, searchParams]);
 
   return (
     <Input
       placeholder="Search articles..."
-      defaultValue={searchParams.get("search") ?? ""}
-      onChange={(e) => handleSearch(e.target.value)}
-      className="max-w-md"
+      value={query}
+      onChange={(e) => setQuery(e.target.value)}
+      className="
+        w-full
+        md:w-[320px]
+      "
     />
   );
 }

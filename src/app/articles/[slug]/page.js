@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 
 export default async function ArticleDetailPage({ params }) {
   const { slug } = await params;
@@ -20,8 +21,38 @@ export default async function ArticleDetailPage({ params }) {
   }
 
   return (
-    <main className="container mx-auto max-w-4xl px-4 py-20">
-      <h1 className="mb-6 text-3xl md:text-5xl font-bold">{article.title}</h1>
+    <main
+      className="
+    mx-auto
+    max-w-4xl
+    py-12
+  "
+    >
+      {/* Date */}
+      <p
+        className="
+      mb-4
+      text-sm
+      text-muted-foreground
+    "
+      >
+        {new Date(article.createdAt).toLocaleDateString()}
+      </p>
+
+      {/* Title */}
+      <h1
+        className="
+      mb-6
+      text-3xl
+      font-bold
+      leading-tight
+      md:text-5xl
+    "
+      >
+        {article.title}
+      </h1>
+
+      {/* Cover */}
       {article.coverImage && (
         <Image
           src={article.coverImage}
@@ -29,41 +60,93 @@ export default async function ArticleDetailPage({ params }) {
           width={1200}
           height={600}
           className="
-      mb-8
-      h-96
-      w-full
-      rounded-2xl
-      object-cover
-    "
+        mb-10
+        h-55
+        w-full
+        rounded-2xl
+        object-cover
+        md:h-105
+      "
         />
       )}
 
-      <p className="mb-8 text-muted-foreground">
-        {new Date(article.createdAt).toLocaleDateString()}
-      </p>
+      {/* Excerpt */}
+      {article.excerpt && (
+        <p
+          className="
+        mb-10
+        text-lg
+        leading-relaxed
+        text-muted-foreground
+      "
+        >
+          {article.excerpt}
+        </p>
+      )}
 
-      <article className="prose prose-neutral max-w-none wrap-break-words">
+      {/* Content */}
+      <article
+        className="
+      prose
+      prose-lg
+      max-w-none
+      wrap-break-word
+    "
+      >
         <p>{article.content}</p>
-        {article.attachment && (
-          <div className="mt-10">
-            <a
-              href={article.attachment.fileUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="
-          inline-flex
-          rounded-lg
-          bg-black
-          px-6
-          py-3
-          text-white
-        "
-            >
-              Download PDF
-            </a>
-          </div>
-        )}
       </article>
+
+      {/* PDF Download */}
+      {article.attachment && (
+        <div
+          className="
+        mt-12
+        rounded-2xl
+        border
+        bg-muted/30
+        p-6
+      "
+        >
+          <h3
+            className="
+          mb-2
+          text-lg
+          font-semibold
+        "
+          >
+            Attached PDF
+          </h3>
+
+          <p
+            className="
+          mb-4
+          text-sm
+          text-muted-foreground
+        "
+          >
+            Download the full document.
+          </p>
+
+          <a
+            href={article.attachment.fileUrl}
+            target="_blank"
+            className="
+          inline-flex
+          rounded-xl
+          bg-black
+          px-5
+          py-3
+          text-sm
+          font-medium
+          text-white
+          transition
+          hover:bg-neutral-800
+        "
+          >
+            Download PDF
+          </a>
+        </div>
+      )}
     </main>
   );
 }
