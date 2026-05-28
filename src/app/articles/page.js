@@ -4,7 +4,8 @@ import ArticleCard from "@/components/article/article-card";
 import ArticleSearch from "@/components/article/article-search";
 
 export default async function ArticlesPage({ searchParams }) {
-  const search = searchParams.q || "";
+  const resolvedSearchParams = await searchParams; // untuk memastikan searchParams sudah ter-resolve sebelum digunakan
+  const search = resolvedSearchParams.q || ""; // gunakan resolvedSearchParams untuk mendapatkan nilai search
 
   const articles = await prisma.article.findMany({
     where: {
