@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 export default function HomePage() {
   return (
     <main>
-      <section className="container mx-auto flex min-h-[80vh] flex-col md:flex-row items-center justify-center px-4 text-center">
+      <section className="container mx-auto flex min-h-[80vh] flex-col items-center justify-center px-4 text-center">
         <span className="mb-4 rounded-full border px-4 py-1 text-sm">
           Digital Research Archive
         </span>
