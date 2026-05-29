@@ -47,6 +47,7 @@ export default function RootLayout({ children }) {
 
         <main
           className="
+          min-h-screen
             mx-auto
             max-w-7xl
             px-4

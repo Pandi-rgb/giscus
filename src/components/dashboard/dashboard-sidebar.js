@@ -28,7 +28,7 @@ export default function DashboardSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="border-b bg-white lg:min-h-[calc(100vh-73px)] lg:w-64 lg:border-b-0 lg:border-r">
+    <aside className="border-b  lg:min-h-[calc(100vh-73px)] lg:w-64 lg:border-b-0 lg:border-r bg-purple-400">
       <div className="flex h-full flex-col gap-6 p-4 lg:sticky lg:top-0 lg:p-6">
         <div>
           <p className="text-sm font-medium text-muted-foreground">Admin</p>

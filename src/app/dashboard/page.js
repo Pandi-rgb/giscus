@@ -17,12 +17,12 @@ export default async function DashboardPage() {
   });
 
   return (
-    <main className="container mx-auto px-4 py-20">
-      <div className="mb-10 flex items-center justify-between">
+    <main className="container mx-auto px-4 py-20 bg-amber-300">
+      <div className=" md:flex items-center justify-between">
         <div>
-          <h1 className="text-5xl font-bold">Dashboard</h1>
+          <h1 className="text-2xl md:text-5xl font-bold">Dashboard</h1>
 
-          <p className="mt-2 text-muted-foreground">
+          <p className="mt-2 text-muted-foreground mb-8">
             Manage your research articles.
           </p>
         </div>
@@ -36,6 +36,7 @@ export default async function DashboardPage() {
       px-4
       py-2
       text-white
+      text-sm
     "
           >
             New Article
@@ -45,7 +46,7 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border">
+      <div className="overflow-hidden rounded-2xl border bg-cyan-700">
         <table className="w-full">
           <thead className="border-b bg-muted/50">
             <tr>
