@@ -16,6 +16,11 @@ export default function ArticleContent({ content }) {
       hljs.highlightElement(block);
     });
 
+    root.querySelectorAll("img").forEach((image) => {
+      image.setAttribute("loading", "lazy");
+      image.setAttribute("decoding", "async");
+    });
+
     root.querySelectorAll('[data-type="inline-math"]').forEach((node) => {
       const latex = node.getAttribute("data-latex");
 

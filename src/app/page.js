@@ -2,6 +2,11 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ArticleCard from "@/components/article/article-card";
 import { prisma } from "@/lib/prisma";
+import { absoluteUrl, createMetadata, siteConfig } from "@/lib/seo";
+
+export const metadata = createMetadata({
+  path: "/",
+});
 
 export default async function HomePage() {
   const featuredArticles = await prisma.article.findMany({
@@ -19,6 +24,24 @@ export default async function HomePage() {
 
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: siteConfig.name,
+            description: siteConfig.description,
+            url: absoluteUrl("/"),
+            potentialAction: {
+              "@type": "SearchAction",
+              target: `${absoluteUrl("/articles")}?q={search_term_string}`,
+              "query-input": "required name=search_term_string",
+            },
+          }),
+        }}
+      />
+
       <section className="container mx-auto flex min-h-[80vh] flex-col items-center justify-center px-4 text-center">
         <span className="mb-4 rounded-full border px-4 py-1 text-sm">
           Digital Research Archive

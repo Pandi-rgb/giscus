@@ -19,6 +19,8 @@ export default function ArticleCard({ article }) {
           alt={article.title}
           width={800}
           height={400}
+          loading="lazy"
+          sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, calc(100vw - 2rem)"
           className="
             h-56
             w-full

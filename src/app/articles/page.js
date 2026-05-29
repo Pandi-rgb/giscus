@@ -4,8 +4,35 @@ import ArticleCard from "@/components/article/article-card";
 import ArticleSearch from "@/components/article/article-search";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { absoluteUrl, createMetadata } from "@/lib/seo";
 
 const ARTICLES_PER_PAGE = 6;
+
+export async function generateMetadata({ searchParams }) {
+  const resolvedSearchParams = await searchParams;
+  const search = getParamValue(resolvedSearchParams.q);
+  const category = getParamValue(resolvedSearchParams.category);
+  const tag = getParamValue(resolvedSearchParams.tag);
+  const page = getParamValue(resolvedSearchParams.page);
+
+  const params = new URLSearchParams();
+
+  if (search) params.set("q", search);
+  if (category) params.set("category", category);
+  if (tag) params.set("tag", tag);
+  if (page) params.set("page", page);
+
+  const path = params.toString() ? `/articles?${params}` : "/articles";
+  const title = search ? `Articles matching "${search}"` : "Articles";
+  const description =
+    "Browse published research articles, filter by category or tag, and download supporting research documents.";
+
+  return createMetadata({
+    title,
+    description,
+    path,
+  });
+}
 
 function getParamValue(value, fallback = "") {
   if (Array.isArray(value)) {
@@ -193,6 +220,16 @@ export default async function ArticlesPage({ searchParams }) {
     currentPage * ARTICLES_PER_PAGE,
     totalArticles,
   );
+  const articleListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: articles.map((article, index) => ({
+      "@type": "ListItem",
+      position: (currentPage - 1) * ARTICLES_PER_PAGE + index + 1,
+      url: absoluteUrl(`/articles/${article.slug}`),
+      name: article.title,
+    })),
+  };
 
   if (currentPage > totalPages && totalArticles > 0) {
     return (
@@ -221,6 +258,13 @@ export default async function ArticlesPage({ searchParams }) {
         py-20
       "
     >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(articleListJsonLd),
+        }}
+      />
+
       <div
         className="
           mb-12

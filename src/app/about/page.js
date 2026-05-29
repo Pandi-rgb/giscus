@@ -1,3 +1,12 @@
+import { createMetadata } from "@/lib/seo";
+
+export const metadata = createMetadata({
+  title: "About",
+  description:
+    "Learn more about the academic profile, research interests, and professional background behind Research Repository.",
+  path: "/about",
+});
+
 export default function AboutPage() {
   return (
     <main className="container mx-auto px-4 py-20">

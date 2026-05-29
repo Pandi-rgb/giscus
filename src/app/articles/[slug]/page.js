@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import ArticleCard from "@/components/article/article-card";
 import ArticleContent from "@/components/article/article-content";
+import { absoluteUrl, createMetadata, siteConfig } from "@/lib/seo";
 
 function stripHtml(value = "") {
   return value.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
@@ -41,23 +42,21 @@ export async function generateMetadata({ params }) {
 
   const description =
     article.excerpt || stripHtml(article.content).slice(0, 155);
+  const images = article.coverImage ? [article.coverImage] : [];
+  const pageMetadata = createMetadata({
+    title: article.title,
+    description,
+    path: `/articles/${article.slug}`,
+    images,
+    type: "article",
+  });
 
   return {
-    title: `${article.title} | Research Repository`,
-    description,
+    ...pageMetadata,
     openGraph: {
-      title: article.title,
-      description,
-      type: "article",
+      ...pageMetadata.openGraph,
       publishedTime: article.createdAt.toISOString(),
       modifiedTime: article.updatedAt.toISOString(),
-      images: article.coverImage ? [article.coverImage] : [],
-    },
-    twitter: {
-      card: article.coverImage ? "summary_large_image" : "summary",
-      title: article.title,
-      description,
-      images: article.coverImage ? [article.coverImage] : [],
     },
   };
 }
@@ -129,9 +128,36 @@ export default async function ArticleDetailPage({ params }) {
   const displayedRelatedArticles =
     relatedArticles.length > 0 ? relatedArticles : fallbackArticles;
   const readingTime = getReadingTime(article.content);
+  const articleUrl = absoluteUrl(`/articles/${article.slug}`);
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    headline: article.title,
+    description: article.excerpt || stripHtml(article.content).slice(0, 155),
+    image: article.coverImage ? [article.coverImage] : undefined,
+    datePublished: article.createdAt.toISOString(),
+    dateModified: article.updatedAt.toISOString(),
+    mainEntityOfPage: articleUrl,
+    url: articleUrl,
+    author: {
+      "@type": "Person",
+      name: siteConfig.name,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: siteConfig.name,
+    },
+    articleSection: article.category?.name,
+    keywords: article.tags.map((tag) => tag.name).join(", "),
+  };
 
   return (
     <main className="mx-auto max-w-6xl py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+
       <div className="mx-auto max-w-4xl">
         <div className="mb-4 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
           <span>{new Date(article.createdAt).toLocaleDateString()}</span>
@@ -175,6 +201,8 @@ export default async function ArticleDetailPage({ params }) {
             alt={article.title}
             width={1200}
             height={600}
+            priority
+            sizes="(min-width: 1024px) 896px, calc(100vw - 2rem)"
             className="
           mb-10
           h-55

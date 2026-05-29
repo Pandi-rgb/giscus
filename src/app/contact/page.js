@@ -1,3 +1,12 @@
+import { createMetadata } from "@/lib/seo";
+
+export const metadata = createMetadata({
+  title: "Contact",
+  description:
+    "Contact Research Repository for academic collaboration, publication questions, and professional research inquiries.",
+  path: "/contact",
+});
+
 export default function ContactPage() {
   return (
     <main className="container mx-auto px-4 py-20">
