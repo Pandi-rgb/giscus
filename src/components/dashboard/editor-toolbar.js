@@ -1,17 +1,25 @@
-// src/components/dashboard/editor-toolbar.js
 "use client";
 
-import { useState, useEffect } from "react"; // 🆕 Tambah useState dan useEffect
-import { Bold, Italic, List, ListOrdered, Heading2, Quote } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+  Bold,
+  Code2,
+  Heading2,
+  Image as ImageIcon,
+  Italic,
+  List,
+  ListOrdered,
+  Quote,
+  Sigma,
+  Text,
+} from "lucide-react";
 
 export default function EditorToolbar({ editor }) {
-  // 🆕 State buatan untuk memicu render ulang komponen secara instan
   const [, setUpdateTrigger] = useState(0);
 
   useEffect(() => {
     if (!editor) return;
 
-    // 🆕 Setiap kali ada interaksi (klik tombol / kursor pindah), paksa Toolbar untuk update warna
     const handleTransaction = () => {
       setUpdateTrigger((prev) => prev + 1);
     };
@@ -25,17 +33,55 @@ export default function EditorToolbar({ editor }) {
 
   if (!editor) return null;
 
+  function insertImage() {
+    const src = window.prompt("Image URL");
+
+    if (!src) return;
+
+    const alt = window.prompt("Alt text") || "";
+    editor.chain().focus().setImage({ src, alt }).run();
+  }
+
+  function insertInlineMath() {
+    const latex = window.prompt("Inline LaTeX", "E = mc^2");
+
+    if (!latex) return;
+
+    editor.chain().focus().insertInlineMath({ latex }).run();
+  }
+
+  function insertBlockMath() {
+    const latex = window.prompt("Block LaTeX", "\\sum_{i=1}^{n} x_i");
+
+    if (!latex) return;
+
+    editor.chain().focus().insertBlockMath({ latex }).run();
+  }
+
+  function insertMarkdown() {
+    const markdown = window.prompt(
+      "Markdown",
+      "## Heading\n\n```js\nconsole.log('hello')\n```"
+    );
+
+    if (!markdown) return;
+
+    editor.commands.insertContent(markdown, {
+      contentType: "markdown",
+    });
+  }
+
   const buttonClass = (isActive) => `
     p-2 rounded-md transition-all text-sm font-medium border
     ${
       isActive
-        ? "bg-blue-50 text-blue-600 border-blue-200 shadow-sm" // Aktif: Biru
-        : "bg-transparent text-gray-600 border-transparent hover:bg-gray-100 hover:text-gray-900" // Mati: Abu-abu
+        ? "bg-blue-50 text-blue-600 border-blue-200 shadow-sm"
+        : "bg-transparent text-gray-600 border-transparent hover:bg-gray-100 hover:text-gray-900"
     }
   `;
 
   return (
-    <div className="flex flex-wrap items-center gap-1 p-2 border-b bg-gray-50">
+    <div className="flex flex-wrap items-center gap-1 border-b bg-gray-50 p-2">
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
@@ -88,6 +134,51 @@ export default function EditorToolbar({ editor }) {
         title="Blockquote"
       >
         <Quote className="h-4 w-4" />
+      </button>
+
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+        className={buttonClass(editor.isActive("codeBlock"))}
+        title="Code Block"
+      >
+        <Code2 className="h-4 w-4" />
+      </button>
+
+      <button
+        type="button"
+        onClick={insertImage}
+        className={buttonClass(false)}
+        title="Embed Image"
+      >
+        <ImageIcon className="h-4 w-4" />
+      </button>
+
+      <button
+        type="button"
+        onClick={insertInlineMath}
+        className={buttonClass(false)}
+        title="Inline Math"
+      >
+        <Sigma className="h-4 w-4" />
+      </button>
+
+      <button
+        type="button"
+        onClick={insertBlockMath}
+        className={buttonClass(editor.isActive("blockMath"))}
+        title="Block Math"
+      >
+        <Sigma className="h-4 w-4" />
+      </button>
+
+      <button
+        type="button"
+        onClick={insertMarkdown}
+        className={buttonClass(false)}
+        title="Insert Markdown"
+      >
+        <Text className="h-4 w-4" />
       </button>
     </div>
   );

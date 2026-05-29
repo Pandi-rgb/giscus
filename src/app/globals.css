@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "katex/dist/katex.min.css";
+@import "highlight.js/styles/github.css";
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
@@ -127,5 +129,32 @@
   }
   html {
     @apply font-sans;
+  }
+}
+
+@layer components {
+  .ProseMirror img,
+  .prose img {
+    @apply mx-auto max-h-[520px] w-auto max-w-full rounded-lg border object-contain;
+  }
+
+  .ProseMirror pre,
+  .prose pre {
+    @apply overflow-x-auto rounded-lg border bg-neutral-950 p-4 text-sm text-neutral-50;
+  }
+
+  .ProseMirror code,
+  .prose code {
+    @apply break-words;
+  }
+
+  .ProseMirror [data-type="block-math"],
+  .prose [data-type="block-math"] {
+    @apply my-6 overflow-x-auto rounded-lg border bg-muted/40 p-4 text-center;
+  }
+
+  .ProseMirror [data-type="inline-math"],
+  .prose [data-type="inline-math"] {
+    @apply inline-flex max-w-full align-middle;
   }
 }

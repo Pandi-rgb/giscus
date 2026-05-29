@@ -120,11 +120,11 @@
 
 # 7. Content Management
 
-- [ ] Integrate MDX support OR Tiptap editor
-- [ ] Syntax highlighting
-- [ ] Image embedding
-- [ ] Mathematical formula rendering (KaTeX)
-- [ ] Markdown support
+- [x] Integrate MDX support OR Tiptap editor
+- [x] Syntax highlighting
+- [x] Image embedding
+- [x] Mathematical formula rendering (KaTeX)
+- [x] Markdown support
 
 ---
 

@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import ArticleCard from "@/components/article/article-card";
+import ArticleContent from "@/components/article/article-content";
 
 function stripHtml(value = "") {
   return value.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
@@ -200,15 +201,7 @@ export default async function ArticleDetailPage({ params }) {
         )}
 
         {/* Content */}
-        <article
-          className="
-        prose
-        prose-lg
-        max-w-none
-        wrap-break-word
-      "
-          dangerouslySetInnerHTML={{ __html: article.content }}
-        />
+        <ArticleContent content={article.content} />
 
         {/* PDF Download */}
         {article.attachment && (
