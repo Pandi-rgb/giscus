@@ -156,9 +156,9 @@
 
 # 10. Comments & Discussion
 
-- [ ] Integrate Giscus
-- [ ] Configure GitHub Discussions
-- [ ] Add comment section to article detail page
+- [x] Integrate Giscus
+- [x] Configure GitHub Discussions
+- [x] Add comment section to article detail page
 
 ---
 

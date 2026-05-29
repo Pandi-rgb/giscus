@@ -16,6 +16,23 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Comments & Discussions
+
+Article comments use Giscus with GitHub Discussions.
+
+1. Enable GitHub Discussions in the repository settings.
+2. Install and enable the Giscus GitHub App for the repository.
+3. Open https://giscus.app, choose the repository and discussion category, then copy the generated values into `.env`.
+
+Required environment variables:
+
+```bash
+NEXT_PUBLIC_GISCUS_REPO=owner/repository
+NEXT_PUBLIC_GISCUS_REPO_ID=...
+NEXT_PUBLIC_GISCUS_CATEGORY=Announcements
+NEXT_PUBLIC_GISCUS_CATEGORY_ID=...
+```
+
 You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

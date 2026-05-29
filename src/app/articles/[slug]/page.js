@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import ArticleCard from "@/components/article/article-card";
 import ArticleContent from "@/components/article/article-content";
+import GiscusComments from "@/components/article/giscus-comments";
 import { absoluteUrl, createMetadata, siteConfig } from "@/lib/seo";
 
 function stripHtml(value = "") {
@@ -282,6 +283,19 @@ export default async function ArticleDetailPage({ params }) {
             </a>
           </div>
         )}
+
+        <section className="mt-12 border-t pt-10" aria-labelledby="discussion">
+          <div className="mb-6">
+            <span className="mb-3 inline-flex rounded-full border px-3 py-1 text-sm">
+              Discussion
+            </span>
+            <h2 id="discussion" className="text-2xl font-bold">
+              Comments
+            </h2>
+          </div>
+
+          <GiscusComments />
+        </section>
       </div>
 
       {displayedRelatedArticles.length > 0 && (
