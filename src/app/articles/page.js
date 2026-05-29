@@ -1,4 +1,3 @@
-export const dynamic = "force-dynamic";
 import { prisma } from "@/lib/prisma";
 
 import ArticleCard from "@/components/article/article-card";
@@ -188,33 +187,31 @@ export default async function ArticlesPage({ searchParams }) {
       : {}),
   };
 
-  const [categories, tags, totalArticles, articles] = await prisma.$transaction(
-    [
-      prisma.category.findMany({
-        orderBy: {
-          name: "asc",
-        },
-      }),
-      prisma.tag.findMany({
-        orderBy: {
-          name: "asc",
-        },
-      }),
-      prisma.article.count({
-        where,
-      }),
-      prisma.article.findMany({
-        where,
-        include: {
-          category: true,
-          tags: true,
-        },
-        orderBy: getArticleOrderBy(sort),
-        skip: (currentPage - 1) * ARTICLES_PER_PAGE,
-        take: ARTICLES_PER_PAGE,
-      }),
-    ],
-  );
+  const [categories, tags, totalArticles, articles] = await prisma.$transaction([
+    prisma.category.findMany({
+      orderBy: {
+        name: "asc",
+      },
+    }),
+    prisma.tag.findMany({
+      orderBy: {
+        name: "asc",
+      },
+    }),
+    prisma.article.count({
+      where,
+    }),
+    prisma.article.findMany({
+      where,
+      include: {
+        category: true,
+        tags: true,
+      },
+      orderBy: getArticleOrderBy(sort),
+      skip: (currentPage - 1) * ARTICLES_PER_PAGE,
+      take: ARTICLES_PER_PAGE,
+    }),
+  ]);
 
   const totalPages = Math.max(1, Math.ceil(totalArticles / ARTICLES_PER_PAGE));
   const firstArticleNumber =
