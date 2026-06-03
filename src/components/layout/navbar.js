@@ -8,11 +8,12 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="border-b">
+    <header className="border-b fixed w-full top-0 z-50 bg-white shadow-sm">
       <div
         className="
           mx-auto
           flex
+          gap-6
           max-w-7xl
           items-center
           justify-between
@@ -40,7 +41,7 @@ export default function Navbar() {
             md:flex
           "
         >
-          <Link href="/">Home</Link>
+          <Link className="hover:text-ring hover:bg-" href="/">Home</Link>
 
           <Link href="/articles">Articles</Link>
 

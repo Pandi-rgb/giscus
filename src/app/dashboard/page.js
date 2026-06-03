@@ -16,12 +16,12 @@ export default async function DashboardPage() {
   });
 
   return (
-    <main className="container mx-auto px-4 py-20 bg-amber-300">
-      <div className=" md:flex items-center justify-between">
-        <div>
+    <main className="container mx-auto px-4 py-20">
+      <div className=" md:flex items-center justify-between bg-linear-to-r from-green-700 via-green-800 to-green-900 p-6 rounded-lg mb-2">
+        <div className="text-slate-200">
           <h1 className="text-2xl md:text-5xl font-bold">Dashboard</h1>
 
-          <p className="mt-2 text-muted-foreground mb-8">
+          <p className="mt-2 text-muted-foreground text-md mb-8">
             Manage your research articles.
           </p>
         </div>
@@ -46,9 +46,9 @@ export default async function DashboardPage() {
       </div>
 
       <div className="overflow-hidden rounded-2xl border bg-cyan-700">
-        <table className="w-full">
-          <thead className="border-b bg-muted/50">
-            <tr>
+        <table className="w-full rounded-xl border bg-white shadow-sm">
+          <thead className="border-b bg-slate-200">
+            <tr className="hover:bg-slate-200">
               <th className="px-6 py-4 text-left">Title</th>
 
               <th className="px-6 py-4 text-left">Status</th>
