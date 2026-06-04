@@ -3,6 +3,7 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
+import TextAlign from "@tiptap/extension-text-align";
 import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
 import { Mathematics } from "@tiptap/extension-mathematics";
 import { Markdown } from "@tiptap/markdown";
@@ -44,6 +45,10 @@ export default function RichTextEditor({ content, onChange }) {
           breaks: true,
         },
       }),
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+      }),
+      
     ],
     content: content || "",
     onUpdate: ({ editor }) => {

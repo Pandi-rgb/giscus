@@ -3,15 +3,16 @@
 import { useEffect, useState } from "react";
 import {
   Bold,
-  Code2,
   Heading2,
   Image as ImageIcon,
   Italic,
   List,
   ListOrdered,
   Quote,
-  Sigma,
-  Text,
+  AlignLeft,
+  AlignRight,
+  AlignCenter,
+  AlignJustify,
 } from "lucide-react";
 
 export default function EditorToolbar({ editor }) {
@@ -56,6 +57,15 @@ export default function EditorToolbar({ editor }) {
     if (!latex) return;
 
     editor.chain().focus().insertBlockMath({ latex }).run();
+  }
+
+  function insertText() {
+    const text = window.prompt("Text");
+
+    if (!text) return;
+
+    editor.chain().focus().insertText(text).run();
+
   }
 
   function insertMarkdown() {
@@ -138,48 +148,85 @@ export default function EditorToolbar({ editor }) {
 
       <button
         type="button"
+        onClick={() => editor.chain().focus().setTextAlign("left").run()}
+        className={buttonClass(editor.isActive({ textAlign: "left" }))}
+        title="AlignLeft"
+      >
+        <AlignLeft className="h-4 w-4" />
+
+      </button>
+
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().setTextAlign("center").run()}
+        className={buttonClass(editor.isActive({ textAlign: "center" }))}
+        title="AlignCenter"
+      >
+        <AlignCenter className="h-4 w-4" />
+      </button>
+
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().setTextAlign("right").run()}
+        className={buttonClass(editor.isActive({ textAlign: "right" }))}
+        title="AlignRight"
+      >
+        <AlignRight className="h-4 w-4" />
+      </button>
+
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().setTextAlign("justify").run()}
+        className={buttonClass(editor.isActive({ textAlign: "justify" }))}
+        title="AlignJustify"
+      >
+        <AlignJustify className="h-4 w-4" />
+      </button>
+
+      {/* <button
+        type="button"
         onClick={() => editor.chain().focus().toggleCodeBlock().run()}
         className={buttonClass(editor.isActive("codeBlock"))}
         title="Code Block"
       >
         <Code2 className="h-4 w-4" />
-      </button>
+      </button> */}
 
-      <button
+      {/* <button
         type="button"
         onClick={insertImage}
         className={buttonClass(false)}
         title="Embed Image"
       >
         <ImageIcon className="h-4 w-4" />
-      </button>
+      </button> */}
 
-      <button
+      {/* <button
         type="button"
         onClick={insertInlineMath}
         className={buttonClass(false)}
         title="Inline Math"
       >
         <Sigma className="h-4 w-4" />
-      </button>
+      </button> */}
 
-      <button
+      {/* <button
         type="button"
         onClick={insertBlockMath}
         className={buttonClass(editor.isActive("blockMath"))}
         title="Block Math"
       >
         <Sigma className="h-4 w-4" />
-      </button>
+      </button> */}
 
-      <button
+      {/* <button
         type="button"
         onClick={insertMarkdown}
         className={buttonClass(false)}
         title="Insert Markdown"
       >
         <Text className="h-4 w-4" />
-      </button>
+      </button> */}
     </div>
   );
 }

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import DeleteArticleButton from "@/components/dashboard/delete-article-button";
 import LogoutButton from "@/components/dashboard/logout-button";
+import {SquarePen} from "lucide-react";
 
 export default async function DashboardPage() {
   const articles = await prisma.article.findMany({
@@ -16,7 +17,7 @@ export default async function DashboardPage() {
   });
 
   return (
-    <main className="container mx-auto px-4 py-20">
+    <main className="container mx-auto px-4 py-20 min-h-screen">
       <div className=" md:flex items-center justify-between bg-linear-to-r from-green-700 via-green-800 to-green-900 p-6 rounded-lg mb-2">
         <div className="text-slate-200">
           <h1 className="text-2xl md:text-5xl font-bold">Dashboard</h1>
@@ -94,7 +95,7 @@ export default async function DashboardPage() {
                       href={`/dashboard/articles/${article.id}/edit`}
                       className="text-sm font-medium"
                     >
-                      Edit
+                      <SquarePen className="h-4 w-4 hover:cursor-pointer hover:text-foreground" />
                     </Link>
 
                     <DeleteArticleButton id={article.id} />
