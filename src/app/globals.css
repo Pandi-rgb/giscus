@@ -141,7 +141,7 @@
 @layer components {
   .ProseMirror img,
   .prose img {
-    @apply mx-auto max-h-[520px] w-auto max-w-full rounded-lg border object-contain;
+    @apply mx-auto max-h-130 w-auto max-w-full rounded-lg border object-contain;
   }
 
   .ProseMirror pre,
@@ -151,7 +151,7 @@
 
   .ProseMirror code,
   .prose code {
-    @apply break-words;
+    @apply wrap-break-words;
   }
 
   .ProseMirror [data-type="block-math"],
