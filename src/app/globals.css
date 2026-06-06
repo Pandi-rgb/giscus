@@ -151,7 +151,7 @@
 
   .ProseMirror code,
   .prose code {
-    @apply wrap-break-words;
+    @apply wrap-break-word;
   }
 
   .ProseMirror [data-type="block-math"],
