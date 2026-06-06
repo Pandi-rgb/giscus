@@ -18,8 +18,8 @@ export default async function DashboardPage() {
 
   return (
     <main className="container mx-auto px-4 py-20 min-h-screen">
-      <div className=" md:flex items-center justify-between bg-linear-to-r from-green-700 via-green-800 to-green-900 p-6 rounded-lg mb-2">
-        <div className="text-slate-200">
+      <div className=" md:flex items-center justify-between bg-linear-to-r from-Ketiga via-Primary to-Secondary p-6 rounded-lg mb-2">
+        <div className="text-slate-200 mx-auto">
           <h1 className="text-2xl md:text-5xl font-bold">Dashboard</h1>
 
           <p className="mt-2 text-muted-foreground text-md mb-8">
@@ -27,7 +27,7 @@ export default async function DashboardPage() {
           </p>
         </div>
 
-        <div className="flex gap-3">
+        {/* <div className="flex gap-3">
           <Link
             href="/dashboard/articles/new"
             className="
@@ -43,7 +43,7 @@ export default async function DashboardPage() {
           </Link>
 
           <LogoutButton />
-        </div>
+        </div> */}
       </div>
 
       <div className="overflow-hidden rounded-2xl border bg-cyan-700">

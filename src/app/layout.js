@@ -41,8 +41,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className="bg-white text-black min-h-screen">
+    <html lang="id">
+      <body className="bg-slate-300 w-full text-black min-h-screen">
         <Navbar />
 
         <main
@@ -50,9 +50,11 @@ export default function RootLayout({ children }) {
           min-h-screen
             mx-auto
             max-w-7xl
-            px-4
-            sm:px-6
-            lg:px-8
+            px-0
+            sm:px-0
+            lg:px-0
+            items-center
+            min-w-screen
           "
         >
           {children}

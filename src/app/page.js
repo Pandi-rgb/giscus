@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import ArticleCard from "@/components/article/article-card";
 import { prisma } from "@/lib/prisma";
 import { absoluteUrl, createMetadata, siteConfig } from "@/lib/seo";
+// memasukkan tailwind config untuk warna biru neon dan biru tua
+
 
 export const metadata = createMetadata({
   path: "/",
@@ -42,13 +44,15 @@ export default async function HomePage() {
         }}
       />
 
-      <section className="container mx-auto flex min-h-[80vh] flex-col items-center justify-center px-4 text-center">
-        <span className="mb-4 rounded-full border px-4 py-1 text-sm">
-          Digital Research Archive
+      <section
+        id="hero-section"
+        className="container mx-auto min-w-screen bg-linear-to-r from-Primary  via-Secondary to-Ketiga w-full flex min-h-screen flex-col items-center justify-center px-4 text-center">
+        <span className="text-slate-300 mb-4 rounded-full border px-4 py-1 text-sm">
+          Halo, saya
         </span>
 
-        <h1 className="mb-6 max-w-4xl text-4xl font-bold leading-tight md:text-6xl lg:text-7xl">
-          Research Repository
+        <h1 className="mb-6 max-w-4xl text-slate-300 text-4xl font-bold leading-tight md:text-6xl lg:text-7xl">
+          Pak Dekan
         </h1>
 
         <p className="mb-8 max-w-2xl text-lg text-muted-foreground">
@@ -57,18 +61,20 @@ export default async function HomePage() {
         </p>
 
         <div className="flex items-center gap-4">
-          <Button asChild>
-            <Link href="/articles">Explore Articles</Link>
+          <Button asChild className="bg-Primary text-white hover:text-Primary py-1">
+            <Link href="/articles">Lihat Artikel</Link>
           </Button>
 
           <Button variant="outline" asChild>
-            <Link href="/about">About Me</Link>
+            <Link
+              className = "py-1"
+              href="/about">Tentang saya</Link>
           </Button>
         </div>
       </section>
 
       <section className="border-y bg-muted/30">
-        <div className="container mx-auto grid gap-10 px-4 py-16 md:grid-cols-[1fr_1.3fr] md:items-center">
+        <div className="container mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 py-16 md:grid-cols-[1fr_1.3fr] md:items-center">
           <div>
             <span className="mb-3 inline-flex rounded-full border bg-white px-3 py-1 text-sm">
               Profile Summary
@@ -80,10 +86,10 @@ export default async function HomePage() {
 
           <div className="space-y-5 text-muted-foreground">
             <p>
-              This repository presents research articles, publication notes,
-              and supporting documents in one accessible place. It is designed
-              for readers who need to scan topics quickly, open full articles,
-              and download research files without friction.
+              This repository presents research articles, publication notes, and
+              supporting documents in one accessible place. It is designed for
+              readers who need to scan topics quickly, open full articles, and
+              download research files without friction.
             </p>
 
             <div className="grid gap-4 sm:grid-cols-3">
@@ -106,7 +112,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="container mx-auto px-4 py-16">
+      <section className="container mx-auto px-10 py-16 max-w-7xl pt-20
+      pb-32 ">
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <span className="mb-3 inline-flex rounded-full border px-3 py-1 text-sm">
@@ -118,7 +125,9 @@ export default async function HomePage() {
           </div>
 
           <Button variant="outline" asChild>
-            <Link href="/articles">View all articles</Link>
+            <Link
+              className="bg-linear-to-r from-Primary via-Secondary to-Ketiga text-slate-300 hover:bg-linear-to-r hover:from-Ketiga hover:via-Secondary hover:to-Primary hover:text-white rounded-lg text-sm duration-1000 transition-all"
+              href="/articles">View all articles</Link>
           </Button>
         </div>
 
