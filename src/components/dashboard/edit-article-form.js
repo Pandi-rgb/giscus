@@ -70,7 +70,7 @@ export default function EditArticleForm({ article, categories = [] }) {
     <div className="max-w-3xl">
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label className="mb-2 block font-medium">Title</label>
+          <label className="mb-2 block font-medium">Judul</label>
           <input
             name="title"
             defaultValue={article?.title}
@@ -90,7 +90,7 @@ export default function EditArticleForm({ article, categories = [] }) {
         </div>
 
         <div>
-          <label className="mb-2 block font-medium">Excerpt</label>
+          <label className="mb-2 block font-medium">Abstrak</label>
           <textarea
             name="excerpt"
             defaultValue={article?.excerpt}
@@ -101,16 +101,16 @@ export default function EditArticleForm({ article, categories = [] }) {
 
         {/* AREA TIPTAP EDIT MODE */}
         <div>
-          <label className="mb-2 block font-medium">Content</label>
+          <label className="mb-2 block font-medium">Konten</label>
           <RichTextEditor content={content} onChange={setContent} />
         </div>
 
-        <div>
-          <label className="mb-2 block font-medium">Category</label>
+        <div className="cursor-pointer">
+          <label className="mb-2 block font-medium">Kategori</label>
           <select
             name="categoryId"
             defaultValue={article?.categoryId || ""}
-            className="w-full rounded-lg border p-3 bg-white"
+            className="w-full rounded-lg border p-3 bg-white cursor-pointer"
           >
             <option value="">Select category</option>
             {categories.map((category) => (
@@ -122,11 +122,11 @@ export default function EditArticleForm({ article, categories = [] }) {
         </div>
 
         <div>
-          <label className="mb-2 block font-medium">Tags</label>
+          <label className="mb-2 block font-medium">Tag</label>
           <input
             name="tags"
             defaultValue={article?.tags?.map((tag) => tag.name).join(", ")}
-            placeholder="research, publication, data"
+            placeholder="Berikan tag, pisahkan dengan koma"
             className="w-full rounded-lg border p-3 bg-white"
           />
         </div>

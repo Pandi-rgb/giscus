@@ -29,10 +29,10 @@ export default async function EditArticlePage({ params }) {
   return (
     <main className="container mx-auto max-w-3xl px-4 py-20">
       <div className="mb-10">
-        <h1 className="text-5xl font-bold">Edit Article</h1>
+        <h1 className="text-5xl font-bold">Edit Artikel</h1>
 
         <p className="mt-2 text-muted-foreground">
-          Update your research article.
+          Update artikel Anda.
         </p>
       </div>
 

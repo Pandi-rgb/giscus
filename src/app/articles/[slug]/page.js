@@ -153,13 +153,13 @@ export default async function ArticleDetailPage({ params }) {
   };
 
   return (
-    <main className="mx-auto max-w-6xl py-12">
+    <main className="mx-auto max-w-6xl pb-8 min-h-screen pt-18">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
 
-      <div className="mx-auto max-w-4xl">
+      <div className="max-w-4xl mx-auto bg-white/50 px-10 py-8 rounded-2xl">
         <div className="mb-4 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
           <span>{new Date(article.createdAt).toLocaleDateString()}</span>
           <span>{readingTime}</span>
@@ -250,7 +250,7 @@ export default async function ArticleDetailPage({ params }) {
             font-semibold
           "
             >
-              Attached PDF
+              Lihat PDF
             </h3>
 
             <p
@@ -260,7 +260,7 @@ export default async function ArticleDetailPage({ params }) {
             text-muted-foreground
           "
             >
-              Download the full document.
+              Dokumen lengkap tersedia dalam format PDF. Klik tombol di bawah untuk mengunduh atau melihatnya secara online.
             </p>
 
             <a
@@ -279,7 +279,7 @@ export default async function ArticleDetailPage({ params }) {
             hover:bg-neutral-800
           "
             >
-              Download PDF
+              Buka PDF
             </a>
           </div>
         )}
@@ -299,7 +299,7 @@ export default async function ArticleDetailPage({ params }) {
       </div>
 
       {displayedRelatedArticles.length > 0 && (
-        <section className="mt-20 border-t pt-12">
+        <section className="mt-20 border-t pt-8 px-8">
           <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
               <span className="mb-3 inline-flex rounded-full border px-3 py-1 text-sm">

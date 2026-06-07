@@ -66,7 +66,7 @@ export default function ArticleSearch({ categories = [], tags = [] }) {
         placeholder="Search articles..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="w-full lg:w-[280px]"
+        className="w-full lg:w-70"
       />
 
       <select

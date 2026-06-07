@@ -86,12 +86,12 @@ export default function EditorToolbar({ editor }) {
     ${
       isActive
         ? "bg-blue-50 text-blue-600 border-blue-200 shadow-sm"
-        : "bg-transparent text-gray-600 border-transparent hover:bg-gray-100 hover:text-gray-900"
+        : "bg-transparent text-gray-600 border-transparent hover:bg-gray-100 hover:text-gray-900 cursor-pointer"
     }
   `;
 
   return (
-    <div className="flex flex-wrap items-center gap-1 border-b bg-gray-50 p-2">
+    <div className="flex flex-wrap items-center gap-1 border-b bg-gray-300 p-2">
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
@@ -182,51 +182,6 @@ export default function EditorToolbar({ editor }) {
       >
         <AlignJustify className="h-4 w-4" />
       </button>
-
-      {/* <button
-        type="button"
-        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-        className={buttonClass(editor.isActive("codeBlock"))}
-        title="Code Block"
-      >
-        <Code2 className="h-4 w-4" />
-      </button> */}
-
-      {/* <button
-        type="button"
-        onClick={insertImage}
-        className={buttonClass(false)}
-        title="Embed Image"
-      >
-        <ImageIcon className="h-4 w-4" />
-      </button> */}
-
-      {/* <button
-        type="button"
-        onClick={insertInlineMath}
-        className={buttonClass(false)}
-        title="Inline Math"
-      >
-        <Sigma className="h-4 w-4" />
-      </button> */}
-
-      {/* <button
-        type="button"
-        onClick={insertBlockMath}
-        className={buttonClass(editor.isActive("blockMath"))}
-        title="Block Math"
-      >
-        <Sigma className="h-4 w-4" />
-      </button> */}
-
-      {/* <button
-        type="button"
-        onClick={insertMarkdown}
-        className={buttonClass(false)}
-        title="Insert Markdown"
-      >
-        <Text className="h-4 w-4" />
-      </button> */}
     </div>
   );
 }

@@ -62,10 +62,10 @@ export default function ArticleForm({ categories, tags = [] }) {
   }
 
   return (
-    <div className="max-w-3xl mb-8">
+    <div className="max-w-3xl mb-8 mt-8">
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label className="mb-2 block font-medium">Title</label>
+          <label className="mb-2 block font-medium">Judul</label>
           <input
             name="title"
             className="w-full rounded-lg border p-3 bg-white"
@@ -83,7 +83,7 @@ export default function ArticleForm({ categories, tags = [] }) {
         </div>
 
         <div>
-          <label className="mb-2 block font-medium">Excerpt</label>
+          <label className="mb-2 block font-medium">Abstrak</label>
           <textarea
             name="excerpt"
             className="w-full rounded-lg border p-3 bg-white"
@@ -93,17 +93,17 @@ export default function ArticleForm({ categories, tags = [] }) {
 
         {/* 🆕 GANTI TEXTAREA KONTEN LAMA DENGAN TIPTAP EDITOR */}
         <div>
-          <label className="mb-2 block font-medium">Content</label>
+          <label className="mb-2 block font-medium">Konten</label>
           <RichTextEditor content={content} onChange={setContent} />
         </div>
 
         <div>
-          <label className="mb-2 block font-medium">Category</label>
+          <label className="mb-2 block font-medium">Kategori</label>
           <select
             name="categoryId"
-            className="w-full rounded-lg border p-3 bg-white"
+            className="cursor-pointer w-full rounded-lg border p-3 bg-white"
           >
-            <option value="">Select category</option>
+            <option value="">Pilih Kategori</option>
             {categories.map((category) => (
               <option key={category.id} value={category.id}>
                 {category.name}
@@ -113,11 +113,11 @@ export default function ArticleForm({ categories, tags = [] }) {
         </div>
 
         <div>
-          <label className="mb-2 block font-medium">Tags</label>
+          <label className="mb-2 block font-medium">Tag</label>
           <input
             name="tags"
             list="available-tags"
-            placeholder="research, publication, data"
+            placeholder="Berikan tag, pisahkan dengan koma"
             className="w-full rounded-lg border p-3 bg-white"
           />
           <datalist id="available-tags">
@@ -128,7 +128,7 @@ export default function ArticleForm({ categories, tags = [] }) {
         </div>
 
         <div>
-          <label className="mb-2 block font-medium">Cover Image</label>
+          <label className="mb-2 block font-medium">Foto Sampul</label>
           <input
             type="file"
             name="cover"

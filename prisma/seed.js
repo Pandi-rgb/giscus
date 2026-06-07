@@ -6,32 +6,18 @@ async function main() {
   await prisma.category.createMany({
     data: [
       {
-        name: "AI",
-        slug: "ai",
+        name: "Artikel",
+        slug: "artikel",
       },
 
       {
-        name: "Web Development",
-
-        slug: "web-development",
+        name: "Berita",
+        slug: "berita",
       },
 
       {
-        name: "Research",
-
-        slug: "research",
-      },
-
-      {
-        name: "Machine Learning",
-
-        slug: "machine-learning",
-      },
-
-      {
-        name: "UI/UX",
-
-        slug: "ui-ux",
+        name: "Jurnal",
+        slug: "jurnal",
       },
     ],
 

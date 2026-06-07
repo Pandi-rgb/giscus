@@ -48,7 +48,6 @@ export default function RichTextEditor({ content, onChange }) {
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
-      
     ],
     content: content || "",
     onUpdate: ({ editor }) => {
@@ -60,6 +59,7 @@ export default function RichTextEditor({ content, onChange }) {
           "prose max-w-none min-h-[280px] p-4 focus:outline-none bg-white rounded-b-lg text-sm",
       },
     },
+    immediatelyRender: false, //untuk mencegah error saat editor belum siap, terutama untuk ekstensi yang memerlukan akses DOM seperti Image
   });
 
   return (

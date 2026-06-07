@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import DeleteArticleButton from "@/components/dashboard/delete-article-button";
-import LogoutButton from "@/components/dashboard/logout-button";
+// import LogoutButton from "@/components/dashboard/logout-button";
 import {SquarePen} from "lucide-react";
 
 export default async function DashboardPage() {
@@ -20,30 +20,12 @@ export default async function DashboardPage() {
     <main className="container mx-auto px-4 py-20 min-h-screen">
       <div className=" md:flex items-center justify-between bg-linear-to-r from-Ketiga via-Primary to-Secondary p-6 rounded-lg mb-2">
         <div className="text-slate-200 mx-auto">
-          <h1 className="text-2xl md:text-5xl font-bold">Dashboard</h1>
+          <h1 className="text-2xl md:text-5xl font-bold flex items-center justify-center">Dashboard</h1>
 
           <p className="mt-2 text-muted-foreground text-md mb-8">
-            Manage your research articles.
+          Kelola artikel Anda dengan mudah melalui dashboard ini.
           </p>
         </div>
-
-        {/* <div className="flex gap-3">
-          <Link
-            href="/dashboard/articles/new"
-            className="
-      rounded-lg
-      bg-black
-      px-4
-      py-2
-      text-white
-      text-sm
-    "
-          >
-            New Article
-          </Link>
-
-          <LogoutButton />
-        </div> */}
       </div>
 
       <div className="overflow-hidden rounded-2xl border bg-cyan-700">
@@ -95,10 +77,10 @@ export default async function DashboardPage() {
                       href={`/dashboard/articles/${article.id}/edit`}
                       className="text-sm font-medium"
                     >
-                      <SquarePen className="h-4 w-4 hover:cursor-pointer hover:text-foreground" />
+                      <SquarePen className="h-4 w-4 hover:cursor-pointer hover:text-blue-500" />
                     </Link>
 
-                    <DeleteArticleButton id={article.id} />
+                    <DeleteArticleButton id={article.id}/>
                   </div>
                 </td>
               </tr>

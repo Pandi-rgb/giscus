@@ -10,22 +10,22 @@ import { cn } from "@/lib/utils";
 const navigationItems = [
   {
     href: "/dashboard",
-    label: "Overview",
+    label: "Beranda",
     icon: Home,
   },
   {
     href: "/dashboard/articles/new",
-    label: "New Article",
+    label: "Artikel Baru",
     icon: PlusCircle,
   },
   {
     href: "/articles",
-    label: "Public Articles",
+    label: "Artikel Publik",
     icon: FileText,
   },
   {
     href: "../../app/login/page.js",
-    label: "Logout",
+    label: "Keluar",
     icon: LogOut,
   },
 ];
