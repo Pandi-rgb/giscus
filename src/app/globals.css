@@ -8,9 +8,9 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --color-Primary: #0F2027;
-  --color-Secondary: #203A43;
-  --color-Ketiga: #2C5364;
+  --color-Primary: #0f2027;
+  --color-Secondary: #203a43;
+  --color-Ketiga: #2c5364;
 }
 
 @theme inline {
