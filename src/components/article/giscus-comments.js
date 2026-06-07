@@ -51,8 +51,8 @@ export default function GiscusComments() {
   if (!hasGiscusConfig()) {
     return (
       <div className="rounded-lg border bg-muted/30 p-6 text-sm text-muted-foreground">
-        Comments are ready to use after GitHub Discussions and Giscus
-        environment variables are configured.
+        Komentar siap digunakan setelah GitHub Discussions dan Giscus variabel
+        environment dikonfigurasi.
       </div>
     );
   }

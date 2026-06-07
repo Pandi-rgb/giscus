@@ -1,3 +1,5 @@
+import { ur } from "zod/v4/locales";
+
 export const siteConfig = {
   name: "Research Repository",
   description:
@@ -22,6 +24,9 @@ export function createMetadata({
   return {
     title: resolvedTitle,
     description,
+    icons: {
+    icon : "/logo.png",
+    },
     alternates: {
       canonical: url,
     },

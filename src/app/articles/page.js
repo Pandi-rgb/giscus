@@ -235,9 +235,11 @@ export default async function ArticlesPage({ searchParams }) {
     return (
       <main className="container mx-auto px-4 py-20">
         <div className="rounded-2xl border p-10 text-center">
-          <h1 className="mb-2 text-2xl font-semibold">Page not found</h1>
+          <h1 className="mb-2 text-2xl font-semibold">
+            Halaman tidak ditemukan
+          </h1>
           <p className="mb-6 text-muted-foreground">
-            The page number is outside the available articles.
+            Nomor halaman berada di luar artikel yang tersedia.
           </p>
           <Button asChild>
             <Link href={createPageHref(resolvedSearchParams, totalPages)}>
@@ -317,7 +319,7 @@ export default async function ArticlesPage({ searchParams }) {
               font-semibold
             "
           >
-            No articles found
+            Tidak ada artikel yang ditemukan
           </h2>
 
           <p
@@ -325,14 +327,14 @@ export default async function ArticlesPage({ searchParams }) {
               text-muted-foreground
             "
           >
-            Try searching with another keyword.
+            Coba cari dengan kata kunci lain.
           </p>
         </div>
       ) : (
         <>
           <div className="mb-6 text-sm text-muted-foreground">
-            Showing {firstArticleNumber}-{lastArticleNumber} of {totalArticles}{" "}
-            articles
+            Menampilkan {firstArticleNumber}-{lastArticleNumber} dari{" "}
+            {totalArticles} artikel
           </div>
 
           <div

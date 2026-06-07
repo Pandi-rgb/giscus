@@ -63,7 +63,7 @@ export default function ArticleSearch({ categories = [], tags = [] }) {
   return (
     <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-4">
       <Input
-        placeholder="Search articles..."
+        placeholder="Cari artikel..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         className="w-full lg:w-70"
@@ -74,7 +74,7 @@ export default function ArticleSearch({ categories = [], tags = [] }) {
         onChange={(e) => setCategory(e.target.value)}
         className="w-full rounded-lg border bg-white p-3 lg:w-auto"
       >
-        <option value="">All categories</option>
+        <option value="">Semua Kategori</option>
         {categories.map((categoryOption) => (
           <option key={categoryOption.id} value={categoryOption.slug}>
             {categoryOption.name}
@@ -87,7 +87,7 @@ export default function ArticleSearch({ categories = [], tags = [] }) {
         onChange={(e) => setTag(e.target.value)}
         className="w-full rounded-lg border bg-white p-3 lg:w-auto"
       >
-        <option value="">All tags</option>
+        <option value="">Semua tag</option>
         {tags.map((tagOption) => (
           <option key={tagOption.id} value={tagOption.slug}>
             {tagOption.name}
@@ -100,9 +100,9 @@ export default function ArticleSearch({ categories = [], tags = [] }) {
         onChange={(e) => setSort(e.target.value)}
         className="w-full rounded-lg border bg-white p-3 lg:w-auto"
       >
-        <option value="newest">Newest</option>
-        <option value="oldest">Oldest</option>
-        <option value="title">Title A-Z</option>
+        <option value="newest">Terbaru</option>
+        <option value="oldest">Terlama</option>
+        <option value="title">Judul A-Z</option>
       </select>
     </div>
   );

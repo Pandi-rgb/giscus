@@ -260,7 +260,8 @@ export default async function ArticleDetailPage({ params }) {
             text-muted-foreground
           "
             >
-              Dokumen lengkap tersedia dalam format PDF. Klik tombol di bawah untuk mengunduh atau melihatnya secara online.
+              Dokumen lengkap tersedia dalam format PDF. Klik tombol di bawah
+              untuk mengunduh atau melihatnya secara online.
             </p>
 
             <a
@@ -287,7 +288,7 @@ export default async function ArticleDetailPage({ params }) {
         <section className="mt-12 border-t pt-10" aria-labelledby="discussion">
           <div className="mb-6">
             <span className="mb-3 inline-flex rounded-full border px-3 py-1 text-sm">
-              Discussion
+              Diskusi
             </span>
             <h2 id="discussion" className="text-2xl font-bold">
               Comments
@@ -303,9 +304,9 @@ export default async function ArticleDetailPage({ params }) {
           <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
               <span className="mb-3 inline-flex rounded-full border px-3 py-1 text-sm">
-                Related Articles
+                Artikel Terkait
               </span>
-              <h2 className="text-3xl font-bold">Continue reading</h2>
+              <h2 className="text-3xl font-bold"> Lanjutkan membaca</h2>
             </div>
           </div>
 
