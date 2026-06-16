@@ -24,7 +24,7 @@ const navigationItems = [
     icon: FileText,
   },
   {
-    href: "../../app/login/page.js",
+    href: "/login",
     label: "Keluar",
     icon: LogOut,
   },
