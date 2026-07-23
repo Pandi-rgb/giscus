@@ -25,7 +25,7 @@ export function createMetadata({
     title: resolvedTitle,
     description,
     icons: {
-    icon : "/logo.png",
+    icon : "/LOGO_HITAM.png",
     },
     alternates: {
       canonical: url,

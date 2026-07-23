@@ -1,3 +1,5 @@
+import Image from "next/image";
+import logo from "@/../public/LOGO_HITAM.png";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ArticleCard from "@/components/article/article-card";
@@ -52,12 +54,11 @@ export default async function HomePage() {
         </span>
 
         <h1 className="mb-6 max-w-4xl text-slate-300 text-4xl font-bold leading-tight md:text-6xl lg:text-7xl">
-          Pak Dekan
+          <Image src={logo} alt="Logo" className="mx-auto mb-4 h-35 w-auto" />
         </h1>
 
         <p className="mb-8 max-w-2xl text-lg text-muted-foreground">
-          A modern digital platform for publishing, managing, and exploring
-          academic research and professional works.
+          Pusat berita terpercaya
         </p>
 
         <div className="flex items-center gap-4">

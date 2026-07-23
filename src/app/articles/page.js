@@ -233,7 +233,7 @@ export default async function ArticlesPage({ searchParams }) {
 
   if (currentPage > totalPages && totalArticles > 0) {
     return (
-      <main className="container mx-auto px-4 py-20">
+      <main className="container min-h-screen mx-auto px-4 py-20">
         <div className="rounded-2xl border p-10 text-center">
           <h1 className="mb-2 text-2xl font-semibold">
             Halaman tidak ditemukan
@@ -258,6 +258,7 @@ export default async function ArticlesPage({ searchParams }) {
         mx-auto
         px-4
         py-20
+        min-h-screen
       "
     >
       <script

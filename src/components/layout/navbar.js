@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+import logo from "@/../public/LOGO_HITAM.png";
 import Link from "next/link";
 import { Home, BookOpen, User, MessageCircle } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -48,16 +50,20 @@ export default function Navbar() {
   // Jika di halaman lain: langsung paksa menjadi solid dan py-3 sejak awal
   const navbarClasses = isHomepage
     ? isSolid
-      ? "bg-linear-to-r from-Primary via-Secondary to-Ketiga w-full shadow-xl py-1" // Setelah scroll setengah hero di homepage
+      ? "bg-slate-300 w-full shadow-xl py-1 text-black hover:text-black" // Setelah scroll setengah hero di homepage
       : "bg-transparent py-5" // Sebelum scroll di homepage
-    : "bg-linear-to-r from-Primary via-Secondary to-Ketiga w-full shadow-xl py-1"; // Otomatis solid di halaman selain homepage
-
+    : "bg-white w-full shadow-xl py-1"; // Otomatis solid di halaman selain homepage
+  const textColorClasses = isHomepage
+    ? isSolid
+      ? "text-Primary hover:text-Ketiga" // Setelah scroll setengah hero di homepage
+      : "text-white hover:text-white"
+    : "text-Primary hover:text-Ketiga";
   return (
     <header
       className={`fixed top-0 left-0 w-full z-50 text-white transition-all duration-500 ${navbarClasses}`}
     >
       <div
-        className="
+        className={`
           mx-auto
           flex
           gap-6
@@ -66,7 +72,8 @@ export default function Navbar() {
           justify-between
           px-4
           py-4
-        "
+          ${textColorClasses}
+        `}
       >
         {/* Logo */}
         <Link
@@ -79,7 +86,7 @@ export default function Navbar() {
             shadow-white/50
           "
         >
-          Pak Dekan
+          <Image src={logo} alt="Logo" className="w-10 md:w-30" />
         </Link>
 
         {/* Desktop Menu */}
