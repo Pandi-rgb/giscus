@@ -50,9 +50,9 @@ export default function Navbar() {
   // Jika di halaman lain: langsung paksa menjadi solid dan py-3 sejak awal
   const navbarClasses = isHomepage
     ? isSolid
-      ? "bg-slate-300 w-full shadow-xl py-1 text-black hover:text-black" // Setelah scroll setengah hero di homepage
+      ? "bg-gradient-to-r from-Primary via-Secondary to-Ketiga w-full shadow-xl py-1 text-black hover:text-black" // Setelah scroll setengah hero di homepage
       : "bg-transparent py-5" // Sebelum scroll di homepage
-    : "bg-white w-full shadow-xl py-1"; // Otomatis solid di halaman selain homepage
+    : "bg-gradient-to-r from-Primary via-Secondary to-Ketiga w-full shadow-xl py-1"; // Otomatis solid di halaman selain homepage
   const textColorClasses = isHomepage
     ? isSolid
       ? "text-Primary hover:text-Ketiga" // Setelah scroll setengah hero di homepage
@@ -63,7 +63,7 @@ export default function Navbar() {
       className={`fixed top-0 left-0 w-full z-50 text-white transition-all duration-500 ${navbarClasses}`}
     >
       <div
-        className={`
+        className="
           mx-auto
           flex
           gap-6
@@ -72,8 +72,7 @@ export default function Navbar() {
           justify-between
           px-4
           py-4
-          ${textColorClasses}
-        `}
+        "
       >
         {/* Logo */}
         <Link

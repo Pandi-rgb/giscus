@@ -1,9 +1,9 @@
 import { ur } from "zod/v4/locales";
 
 export const siteConfig = {
-  name: "Research Repository",
+  name: "Posisi 21 Media",
   description:
-    "A modern digital archive for publishing, managing, and exploring academic research and professional works.",
+    "Pusat berita terbaik. Punya pak dekan ini guys",
   url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
 };
 
