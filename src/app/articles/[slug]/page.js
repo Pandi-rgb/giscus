@@ -17,18 +17,24 @@ function getReadingTime(content = "") {
   return `${minutes} min read`;
 }
 
-async function getArticle(slug) {
-  return prisma.article.findUnique({
-    where: {
-      slug,
-    },
+export const dynamic = "force-dynamic";
 
-    include: {
-      attachment: true,
-      category: true,
-      tags: true,
-    },
-  });
+async function getArticle(slug) {
+  try {
+    return await prisma.article.findUnique({
+      where: {
+        slug,
+      },
+      include: {
+        attachment: true,
+        category: true,
+        tags: true,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching article by slug:", error);
+    return null;
+  }
 }
 
 export async function generateMetadata({ params }) {
@@ -86,48 +92,51 @@ export default async function ArticleDetailPage({ params }) {
       : null,
   ].filter(Boolean);
 
-  const relatedArticles = await prisma.article.findMany({
-    where: {
-      published: true,
-      id: {
-        not: article.id,
+  let relatedArticles = [];
+  try {
+    relatedArticles = await prisma.article.findMany({
+      where: {
+        published: true,
+        id: {
+          not: article.id,
+        },
+        ...(relatedConditions.length
+          ? {
+              OR: relatedConditions,
+            }
+          : {}),
       },
-      ...(relatedConditions.length
-        ? {
-            OR: relatedConditions,
-          }
-        : {}),
-    },
-    include: {
-      category: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: 3,
-  });
+      include: {
+        category: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 3,
+    });
 
-  const fallbackArticles =
-    relatedArticles.length > 0
-      ? []
-      : await prisma.article.findMany({
-          where: {
-            published: true,
-            id: {
-              not: article.id,
-            },
+    if (relatedArticles.length === 0) {
+      relatedArticles = await prisma.article.findMany({
+        where: {
+          published: true,
+          id: {
+            not: article.id,
           },
-          include: {
-            category: true,
-          },
-          orderBy: {
-            createdAt: "desc",
-          },
-          take: 3,
-        });
+        },
+        include: {
+          category: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: 3,
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching related articles:", error);
+  }
 
-  const displayedRelatedArticles =
-    relatedArticles.length > 0 ? relatedArticles : fallbackArticles;
+  const displayedRelatedArticles = relatedArticles;
   const readingTime = getReadingTime(article.content);
   const articleUrl = absoluteUrl(`/articles/${article.slug}`);
   const articleJsonLd = {

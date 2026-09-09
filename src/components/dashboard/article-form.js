@@ -1,16 +1,52 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { uploadPDF } from "@/lib/supabase/storage";
 import { uploadCover } from "@/lib/supabase/upload-cover";
-import RichTextEditor from "./rich-text-editor"; // 🆕 Import Tiptap Editor baru
+import RichTextEditor from "./rich-text-editor";
+import { toast } from "sonner";
+import { Loader2, Save, Image as ImageIcon, FileUp, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-export default function ArticleForm({ categories, tags = [] }) {
+function slugify(value) {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+export default function ArticleForm({ categories = [], tags = [] }) {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [content, setContent] = useState(""); // 🆕 State khusus untuk menampung HTML Tiptap
+  const [content, setContent] = useState("");
+  const [title, setTitle] = useState("");
+  const [slug, setSlug] = useState("");
+  const [slugModified, setSlugModified] = useState(false);
+  const [published, setPublished] = useState("true");
+
+  function handleTitleChange(e) {
+    const newTitle = e.target.value;
+    setTitle(newTitle);
+    if (!slugModified) {
+      setSlug(slugify(newTitle));
+    }
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
+
+    if (!title.trim()) {
+      toast.error("Judul artikel wajib diisi.");
+      return;
+    }
+
+    if (!content.trim()) {
+      toast.error("Isi konten artikel tidak boleh kosong.");
+      return;
+    }
+
     setLoading(true);
 
     const formData = new FormData(e.target);
@@ -22,23 +58,33 @@ export default function ArticleForm({ categories, tags = [] }) {
 
     try {
       if (coverFile && coverFile.size > 0) {
-        coverImage = await uploadCover(coverFile);
+        try {
+          coverImage = await uploadCover(coverFile);
+        } catch (uploadErr) {
+          console.error("Gagal upload cover ke storage:", uploadErr);
+          toast.warning("Gagal mengunggah foto sampul ke storage (koneksi storage tidak aktif). Artikel tetap akan disimpan.");
+        }
       }
 
       if (pdfFile && pdfFile.size > 0) {
-        attachment = await uploadPDF(pdfFile);
+        try {
+          attachment = await uploadPDF(pdfFile);
+        } catch (uploadErr) {
+          console.error("Gagal upload PDF ke storage:", uploadErr);
+          toast.warning("Gagal mengunggah PDF ke storage (koneksi storage tidak aktif). Artikel tetap akan disimpan.");
+        }
       }
 
-      // Kirim data ke API route untuk disimpan di database
       const response = await fetch("/api/articles", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          title: formData.get("title"),
-          slug: formData.get("slug"),
+          title,
+          slug: slug ? slugify(slug) : slugify(title),
           excerpt: formData.get("excerpt"),
-          content: content, // 🆕 Kirim nilai dari state Tiptap, bukan dari formData
-          categoryId: formData.get("categoryId"),
+          content,
+          published: published === "true",
+          categoryId: formData.get("categoryId") || null,
           tagNames: formData
             .get("tags")
             .split(",")
@@ -49,110 +95,216 @@ export default function ArticleForm({ categories, tags = [] }) {
         }),
       });
 
-      if (response.ok) {
-        alert("Article created!");
-        e.target.reset();
-        setContent(""); // 🆕 Kosongkan kembali editor Tiptap setelah sukses
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Gagal menyimpan artikel.");
       }
+
+      toast.success(
+        published === "true"
+          ? "Artikel berhasil diterbitkan!"
+          : "Artikel berhasil disimpan sebagai draf!",
+      );
+
+      router.push("/dashboard");
+      router.refresh();
     } catch (error) {
       console.error("Gagal membuat artikel:", error);
+      toast.error(error.message || "Gagal membuat artikel. Pastikan database aktif.");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="max-w-3xl mb-8 mt-8">
+    <div className="max-w-4xl rounded-3xl border bg-card p-6 shadow-xs sm:p-8">
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label className="mb-2 block font-medium">Judul</label>
+        {/* Title */}
+        <div className="space-y-2">
+          <label className="text-sm font-semibold text-foreground">
+            Judul Artikel <span className="text-red-500">*</span>
+          </label>
           <input
             name="title"
-            className="w-full rounded-lg border p-3 bg-white"
+            value={title}
+            onChange={handleTitleChange}
+            placeholder="Contoh: Analisis Dinamika Algoritma dalam Jurnalisme Digital"
+            className="w-full rounded-xl border bg-background px-4 py-3 text-sm outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
             required
           />
         </div>
 
-        <div>
-          <label className="mb-2 block font-medium">Slug</label>
-          <input
-            name="slug"
-            className="w-full rounded-lg border p-3 bg-white"
-            required
-          />
+        {/* Slug */}
+        <div className="space-y-2">
+          <label className="text-sm font-semibold text-foreground">
+            Slug URL <span className="text-red-500">*</span>
+          </label>
+          <div className="flex items-center rounded-xl border bg-background px-3 focus-within:border-cyan-500 focus-within:ring-2 focus-within:ring-cyan-500/20">
+            <span className="text-xs text-muted-foreground">/articles/</span>
+            <input
+              name="slug"
+              value={slug}
+              onChange={(e) => {
+                setSlugModified(true);
+                setSlug(e.target.value);
+              }}
+              placeholder="analisis-dinamika-algoritma"
+              className="w-full bg-transparent px-2 py-3 text-sm outline-none"
+              required
+            />
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Identitas unik URL artikel. Dibuat otomatis dari judul atau dapat disesuaikan.
+          </p>
         </div>
 
-        <div>
-          <label className="mb-2 block font-medium">Abstrak</label>
+        {/* Excerpt */}
+        <div className="space-y-2">
+          <label className="text-sm font-semibold text-foreground">
+            Abstrak / Ringkasan Singkat
+          </label>
           <textarea
             name="excerpt"
-            className="w-full rounded-lg border p-3 bg-white"
             rows={3}
+            placeholder="Tuliskan 1-3 kalimat abstrak penelitian yang merangkum pokok bahasan artikel..."
+            className="w-full resize-y rounded-xl border bg-background px-4 py-3 text-sm outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
           />
         </div>
 
-        {/* 🆕 GANTI TEXTAREA KONTEN LAMA DENGAN TIPTAP EDITOR */}
-        <div>
-          <label className="mb-2 block font-medium">Konten</label>
-          <RichTextEditor content={content} onChange={setContent} />
+        {/* Content Editor */}
+        <div className="space-y-2">
+          <label className="text-sm font-semibold text-foreground">
+            Naskah Lengkap Artikel <span className="text-red-500">*</span>
+          </label>
+          <div className="rounded-xl border border-input">
+            <RichTextEditor content={content} onChange={setContent} />
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Mendukung pemformatan teks kaya, rumus matematika (KaTeX), gambar, dan cuplikan kode.
+          </p>
         </div>
 
-        <div>
-          <label className="mb-2 block font-medium">Kategori</label>
-          <select
-            name="categoryId"
-            className="cursor-pointer w-full rounded-lg border p-3 bg-white"
+        {/* Meta Options Grid */}
+        <div className="grid gap-6 sm:grid-cols-3">
+          {/* Category */}
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-foreground">
+              Kategori
+            </label>
+            <select
+              name="categoryId"
+              className="w-full rounded-xl border bg-background px-3 py-2.5 text-sm outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
+            >
+              <option value="">Pilih Kategori</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Tags */}
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-foreground">
+              Tag (Pisahkan Koma)
+            </label>
+            <input
+              name="tags"
+              list="available-tags"
+              placeholder="Media, Riset, AI"
+              className="w-full rounded-xl border bg-background px-3 py-2.5 text-sm outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
+            />
+            <datalist id="available-tags">
+              {tags.map((tag) => (
+                <option key={tag.id} value={tag.name} />
+              ))}
+            </datalist>
+          </div>
+
+          {/* Publication Status */}
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-foreground">
+              Status Publikasi
+            </label>
+            <select
+              value={published}
+              onChange={(e) => setPublished(e.target.value)}
+              className="w-full rounded-xl border bg-background px-3 py-2.5 text-sm outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
+            >
+              <option value="true">Published (Langsung Tayang)</option>
+              <option value="false">Draft (Simpan Sementara)</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Uploads Grid */}
+        <div className="grid gap-6 sm:grid-cols-2">
+          {/* Cover Image */}
+          <div className="space-y-2 rounded-2xl border border-dashed border-border p-4">
+            <label className="flex items-center gap-2 text-sm font-semibold text-foreground">
+              <ImageIcon className="h-4 w-4 text-cyan-600" />
+              Foto Sampul (Cover Image)
+            </label>
+            <input
+              type="file"
+              name="cover"
+              accept="image/*"
+              className="w-full text-xs text-muted-foreground file:mr-3 file:rounded-lg file:border-0 file:bg-cyan-100 file:px-3 file:py-2 file:text-xs file:font-semibold file:text-cyan-800 hover:file:bg-cyan-200 dark:file:bg-cyan-950 dark:file:text-cyan-300"
+            />
+            <p className="text-xs text-muted-foreground">
+              Format: JPG, PNG, atau WEBP. Maksimal 5MB.
+            </p>
+          </div>
+
+          {/* PDF Attachment */}
+          <div className="space-y-2 rounded-2xl border border-dashed border-border p-4">
+            <label className="flex items-center gap-2 text-sm font-semibold text-foreground">
+              <FileUp className="h-4 w-4 text-cyan-600" />
+              Dokumen Lengkap (PDF)
+            </label>
+            <input
+              type="file"
+              name="pdf"
+              accept=".pdf"
+              className="w-full text-xs text-muted-foreground file:mr-3 file:rounded-lg file:border-0 file:bg-cyan-100 file:px-3 file:py-2 file:text-xs file:font-semibold file:text-cyan-800 hover:file:bg-cyan-200 dark:file:bg-cyan-950 dark:file:text-cyan-300"
+            />
+            <p className="text-xs text-muted-foreground">
+              Dokumen riset lengkap untuk diunduh pembaca secara terbuka.
+            </p>
+          </div>
+        </div>
+
+        {/* Submit Actions */}
+        <div className="flex flex-wrap items-center justify-end gap-3 pt-4">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => router.push("/dashboard")}
+            disabled={loading}
           >
-            <option value="">Pilih Kategori</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </div>
+            Batal
+          </Button>
 
-        <div>
-          <label className="mb-2 block font-medium">Tag</label>
-          <input
-            name="tags"
-            list="available-tags"
-            placeholder="Berikan tag, pisahkan dengan koma"
-            className="w-full rounded-lg border p-3 bg-white"
-          />
-          <datalist id="available-tags">
-            {tags.map((tag) => (
-              <option key={tag.id} value={tag.name} />
-            ))}
-          </datalist>
+          <Button
+            type="submit"
+            disabled={loading}
+            className="bg-cyan-600 px-6 font-semibold text-white hover:bg-cyan-500"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Menyimpan...
+              </>
+            ) : (
+              <>
+                <Save className="mr-2 h-4 w-4" />
+                {published === "true" ? "Terbitkan Artikel" : "Simpan Draf"}
+              </>
+            )}
+          </Button>
         </div>
-
-        <div>
-          <label className="mb-2 block font-medium">Foto Sampul</label>
-          <input
-            type="file"
-            name="cover"
-            accept="image/*"
-            className="w-full rounded-lg border p-3 bg-yellow-500 hover:bg-yellow-600 cursor-pointer text-white font-medium"
-          />
-        </div>
-
-        <div>
-          <label className="mb-2 block font-medium">PDF File</label>
-          <input
-            type="file"
-            name="pdf"
-            accept=".pdf"
-            className="w-full rounded-lg border p-3 bg-yellow-500 hover:bg-yellow-600 cursor-pointer text-white font-medium"
-          />
-        </div>
-
-        <button
-          disabled={loading}
-          className="rounded-lg bg-black px-6 py-3 text-white font-medium disabled:opacity-50"
-        >
-          {loading ? "Creating..." : "Create Article"}
-        </button>
       </form>
     </div>
   );

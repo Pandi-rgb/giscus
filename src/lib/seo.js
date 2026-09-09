@@ -1,9 +1,7 @@
-import { ur } from "zod/v4/locales";
-
 export const siteConfig = {
   name: "Posisi 21 Media",
   description:
-    "Pusat berita terbaik. Punya pak dekan ini guys",
+    "Portal berita dan artikel terpercaya menyajikan informasi terkini, liputan mendalam, opini kredibel, dan jurnalisme berkualitas.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
 };
 
@@ -18,14 +16,14 @@ export function createMetadata({
   images = [],
   type = "website",
 } = {}) {
-  const resolvedTitle = title || siteConfig.name;
+  const resolvedTitle = title ? `${title} | ${siteConfig.name}` : siteConfig.name;
   const url = absoluteUrl(path);
 
   return {
     title: resolvedTitle,
     description,
     icons: {
-    icon : "/LOGO_HITAM.png",
+      icon: "/LOGO_HITAM.png",
     },
     alternates: {
       canonical: url,

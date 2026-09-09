@@ -1,80 +1,109 @@
 "use client";
 
 import Link from "next/link";
-import { FileText, Home, PlusCircle, Settings, LogOut } from "lucide-react";
-import { usePathname } from "next/navigation";
-import LogoutButton from "@/components/dashboard/logout-button";
-
+import { useRouter, usePathname } from "next/navigation";
+import {
+  FileText,
+  LayoutDashboard,
+  PlusCircle,
+  ExternalLink,
+  LogOut,
+  Sparkles,
+} from "lucide-react";
+import { supabase } from "@/lib/supabase/client";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 const navigationItems = [
   {
     href: "/dashboard",
-    label: "Beranda",
-    icon: Home,
+    label: "Beranda Dashboard",
+    icon: LayoutDashboard,
+    exact: true,
   },
   {
     href: "/dashboard/articles/new",
-    label: "Artikel Baru",
+    label: "Tulis Artikel Baru",
     icon: PlusCircle,
   },
   {
     href: "/articles",
-    label: "Artikel Publik",
-    icon: FileText,
-  },
-  {
-    href: "/login",
-    label: "Keluar",
-    icon: LogOut,
+    label: "Lihat Web Publik",
+    icon: ExternalLink,
+    external: true,
   },
 ];
 
 export default function DashboardSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  async function handleLogout() {
+    try {
+      await supabase.auth.signOut();
+      toast.success("Berhasil keluar dari akun admin.");
+      router.push("/login");
+      router.refresh();
+    } catch (error) {
+      console.error("Logout error:", error);
+      router.push("/login");
+    }
+  }
 
   return (
-    <aside className="border-b shadow-sm border-r lg:min-h-[calc(100vh-73px)] lg:w-64 lg:border-b-0 lg:border-r mt-0 bg-slate-800">
-      <div className="flex h-full flex-col gap-6 p-4 lg:sticky lg:top-0 lg:p-6">
-        <div>
-          <p className="text-sm font-medium text-muted-foreground">Admin</p>
-          <h2 className="text-xl text-slate-200 font-semibold">Dashboard</h2>
-        </div>
+    <aside className="border-b bg-card lg:w-64 lg:shrink-0 lg:border-b-0 lg:border-r">
+      <div className="flex h-full flex-col justify-between p-4 lg:p-6">
+        <div className="space-y-6">
+          <div>
+            <span className="inline-flex items-center gap-1 rounded-md bg-cyan-100 px-2 py-0.5 text-xs font-semibold text-cyan-800 dark:bg-cyan-950 dark:text-cyan-300">
+              <Sparkles className="h-3 w-3" />
+              Admin Portal
+            </span>
+            <h2 className="mt-2 text-lg font-bold text-foreground">
+              Posisi 21 Media
+            </h2>
+            <p className="text-xs text-muted-foreground">
+              Sistem Manajemen Riset
+            </p>
+          </div>
 
-        <nav className="flex gap-2 overflow-x-auto lg:flex-col lg:overflow-visible">
-          {navigationItems.map((item) => {
-            const Icon = item.icon;
-            const isActive =
-              item.href === "/dashboard"
+          <nav className="flex flex-row gap-1 overflow-x-auto lg:flex-col lg:overflow-visible">
+            {navigationItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = item.exact
                 ? pathname === item.href
                 : pathname.startsWith(item.href);
 
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "inline-flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium transition hover:bg-muted",
-                  isActive
-                    ? "bg-black text-white hover:bg-black"
-                    : "text-muted-foreground",
-                )}
-              >
-                <Icon className="h-4 w-4" />
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
-
-        <div className="mt-auto hidden rounded-lg border p-4 text-sm text-muted-foreground lg:block">
-          <div className="mb-2 flex items-center gap-2 font-medium text-slate-200">
-            <Settings className="h-4 w-4" />
-            Content tools
-          </div>
-          Manage articles, files, categories, and tags from one workspace.
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  target={item.external ? "_blank" : undefined}
+                  className={cn(
+                    "flex items-center gap-2.5 whitespace-nowrap rounded-xl px-3.5 py-2.5 text-sm font-medium transition",
+                    isActive
+                      ? "bg-cyan-600 text-white shadow-xs"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                  )}
+                >
+                  <Icon className="h-4 w-4 shrink-0" />
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
         </div>
-        
+
+        {/* Logout Section */}
+        <div className="mt-6 border-t pt-4">
+          <button
+            onClick={handleLogout}
+            className="flex w-full cursor-pointer items-center gap-2.5 rounded-xl px-3.5 py-2.5 text-sm font-medium text-red-600 transition hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-950/30"
+          >
+            <LogOut className="h-4 w-4 shrink-0" />
+            Keluar (Logout)
+          </button>
+        </div>
       </div>
     </aside>
   );

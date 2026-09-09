@@ -41,26 +41,12 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="id">
-      <body className="bg-slate-300 min-h-screen w-full text-black">
+    <html lang="id" className="scroll-smooth">
+      <body className="min-h-screen w-full bg-background text-foreground flex flex-col antialiased">
         <Navbar />
-
-        <main
-          className="
-            mx-auto
-            max-w-7xl
-            px-0
-            sm:px-0
-            lg:px-0
-            items-center
-            min-w-screen
-          "
-        >
-          {children}
-        </main>
-
+        <main className="flex-1 w-full">{children}</main>
         <Footer />
-        <Toaster />
+        <Toaster richColors position="top-right" />
       </body>
     </html>
   );

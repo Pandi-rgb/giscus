@@ -80,10 +80,11 @@ export async function PUT(req, { params }) {
 
       data: {
         title: body.title,
-        slug: body.slug,
+        slug: body.slug ? createSlug(body.slug) : undefined,
         excerpt: body.excerpt,
         content: body.content,
         coverImage: body.coverImage,
+        published: body.published !== undefined ? Boolean(body.published) : undefined,
         categoryId: body.categoryId || null,
         tags: {
           set: [],

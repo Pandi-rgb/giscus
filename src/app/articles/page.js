@@ -8,6 +8,8 @@ import { absoluteUrl, createMetadata } from "@/lib/seo";
 
 const ARTICLES_PER_PAGE = 6;
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({ searchParams }) {
   const resolvedSearchParams = await searchParams;
   const search = getParamValue(resolvedSearchParams.q);
@@ -187,31 +189,40 @@ export default async function ArticlesPage({ searchParams }) {
       : {}),
   };
 
-  const [categories, tags, totalArticles, articles] = await prisma.$transaction([
-    prisma.category.findMany({
-      orderBy: {
-        name: "asc",
-      },
-    }),
-    prisma.tag.findMany({
-      orderBy: {
-        name: "asc",
-      },
-    }),
-    prisma.article.count({
-      where,
-    }),
-    prisma.article.findMany({
-      where,
-      include: {
-        category: true,
-        tags: true,
-      },
-      orderBy: getArticleOrderBy(sort),
-      skip: (currentPage - 1) * ARTICLES_PER_PAGE,
-      take: ARTICLES_PER_PAGE,
-    }),
-  ]);
+  let categories = [];
+  let tags = [];
+  let totalArticles = 0;
+  let articles = [];
+
+  try {
+    [categories, tags, totalArticles, articles] = await prisma.$transaction([
+      prisma.category.findMany({
+        orderBy: {
+          name: "asc",
+        },
+      }),
+      prisma.tag.findMany({
+        orderBy: {
+          name: "asc",
+        },
+      }),
+      prisma.article.count({
+        where,
+      }),
+      prisma.article.findMany({
+        where,
+        include: {
+          category: true,
+          tags: true,
+        },
+        orderBy: getArticleOrderBy(sort),
+        skip: (currentPage - 1) * ARTICLES_PER_PAGE,
+        take: ARTICLES_PER_PAGE,
+      }),
+    ]);
+  } catch (error) {
+    console.error("Database query failed in ArticlesPage:", error);
+  }
 
   const totalPages = Math.max(1, Math.ceil(totalArticles / ARTICLES_PER_PAGE));
   const firstArticleNumber =

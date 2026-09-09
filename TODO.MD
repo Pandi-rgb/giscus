@@ -56,7 +56,7 @@
 - [x] Session management
 - [x] Protected dashboard routes
 - [x] Middleware authentication
-- [ ] Role-based access (admin only)
+- [x] Role-based access (admin only)
 
 ---
 
@@ -72,11 +72,11 @@
 
 ## About Page
 
-- [x] Full biography (basic placeholder)
-- [ ] Academic background
-- [ ] Research interests
-- [ ] Experience section
-- [ ] Profile image
+- [x] Full biography (Profil Akademik & Riset)
+- [x] Academic background (Riwayat S1, S2, S3)
+- [x] Research interests (Fokus keilmuan & topik riset)
+- [x] Experience section (Kepemimpinan akademik & dedikasi)
+- [x] Profile badge & visual metrics
 
 ## Articles Page
 
@@ -97,10 +97,10 @@
 
 ## Contact Page
 
-- [x] Contact form (basic page placeholder)
-- [ ] Social media links
-- [ ] Email information
-- [ ] Form validation
+- [x] Contact form (interaktif dengan validasi)
+- [x] Social media & academic links (Google Scholar, ORCID, LinkedIn, GitHub)
+- [x] Email information & office details
+- [x] Form validation & Sonner toast notification
 
 ---
 
@@ -144,8 +144,8 @@
 
 ## MVP
 
-- [x] Client-side article search (fungsi belum jalan)
-- [x] Keyword filtering
+- [x] Client-side article search (Debounced 350ms, multi-filter & reset)
+- [x] Keyword filtering & category/tag filtering
 
 ## Future Upgrade
 
