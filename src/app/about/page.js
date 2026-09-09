@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { createMetadata } from "@/lib/seo";
-import logo from "@/../../public/LOGO_HITAM.png";
+// import logo from "../../public/LOGO_HITAM.png";
 
 
 export const metadata = createMetadata({
@@ -122,7 +122,7 @@ export default function AboutPage() {
             {/* Corporate Badge Avatar */}
             <div className="relative shrink-0">
               <div className="flex h-36 w-36 items-center justify-center rounded-3xl bg-gradient-to-br from-slate-700 to-slate-500 text-4xl font-extrabold text-white shadow-2xl ring-4 ring-white/20 md:h-44 md:w-44">
-                <Image src={logo} alt="Logo" width={100} height={100} priority />
+                <Image src="/LOGO_HITAM.png" alt="Logo" width={100} height={100} style={{ height: "auto" }} priority />
               </div>
               <div className="absolute -bottom-3 -right-2 flex items-center gap-1 rounded-full bg-cyan-500 px-3 py-1 text-xs font-semibold text-slate-950 shadow-md">
                 <CheckCircle2 className="h-3.5 w-3.5" />
